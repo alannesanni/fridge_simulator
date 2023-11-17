@@ -1,12 +1,13 @@
 from app import app
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, flash
 from os import getenv
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
 import ast
+from db_methods import DatabaseMethods
 
 @app.route("/")
 def index():
@@ -16,20 +17,14 @@ def index():
 def login():
     username = request.form["username"]
     password = request.form["password"]
-
-    sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username":username})
-    user = result.fetchone()    
-    if not user:
-        return redirect("/")
-        
-    else:
-        hash_value = user.password
-        if check_password_hash(hash_value, password):
-            session["username"] = username
-            return redirect("/mainpage")           
-        else:
-            return redirect("/")
+    try:
+        DatabaseMethods().check_login(username, password)
+        session["username"] = username
+        return redirect("/mainpage")
+    except Exception as error:
+            flash(str(error))
+            return redirect("/")         
+    
 
 @app.route("/logout")
 def logout():
@@ -88,14 +83,20 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        hash_password=generate_password_hash(password)
-        sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
-        db.session.execute(sql, {"username":username, "password":hash_password})
-        db.session.commit()
-        sql = text("SELECT id FROM users WHERE username=:username")
-        result = db.session.execute(sql, {"username":username})
-        user_id = result.fetchone()[0]
-        sql = text("INSERT INTO selected_ingredients (id, selected) VALUES (:user_id, :empty_list)")
-        db.session.execute(sql, {"user_id":user_id, "empty_list":[]})
-        db.session.commit()
-        return redirect("/")
+
+        try:
+            DatabaseMethods().validate(username, password)
+            hash_password=generate_password_hash(password)
+            sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
+            db.session.execute(sql, {"username":username, "password":hash_password})
+            db.session.commit()
+            sql = text("SELECT id FROM users WHERE username=:username")
+            result = db.session.execute(sql, {"username":username})
+            user_id = result.fetchone()[0]
+            sql = text("INSERT INTO selected_ingredients (id, selected) VALUES (:user_id, :empty_list)")
+            db.session.execute(sql, {"user_id":user_id, "empty_list":[]})
+            db.session.commit()
+            return redirect("/")
+        except Exception as error:
+            flash(str(error))
+            return redirect("/register")

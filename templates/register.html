@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 
 <form action="/register" method="POST">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
     <p>Tunnus:<br>
     <input type="text" name="username"></p>
     <p>Salasana:<br>
