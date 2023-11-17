@@ -21,6 +21,13 @@ Luo repositorion juurikansioon tiedosto .env ja lisää sinne seuraavat:
 DATABASE_URL = <tietokannan paikallinen osoite>
 SECRET_KEY = <salainen avain>
 ```
+
+Luo hakemistoon Pythonin virtuaaliympäristö komennolla:
+```
+python3 -m venv venv
+
+```
+
 Siirry seuraavaksi virtuaaliympäristöön komennolla:
 ```
 source venv/bin/activate
