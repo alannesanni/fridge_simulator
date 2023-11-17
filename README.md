@@ -10,3 +10,32 @@ Sovelluksessa voi listata, mitä kaikkia aineksia jääkaapista löytyy ja sovel
 * Käyttäjä voi poistaa reseptiltä tykkäyksen.
 * Ylläpitäjä voi lisätä sovellukseen puuttuvia valittavia aineksia ja uusia reseptejä.
   
+
+**Käynnistysohjeet**
+
+Kloonaa ensin repositorio koneellesi.
+
+Luo repositorion juurikansioon tiedosto .env ja lisää sinne seuraavat:
+
+```
+DATABASE_URL = <tietokannan paikallinen osoite>
+SECRET_KEY = <salainen avain>
+```
+Siirry seuraavaksi virtuaaliympäristöön komennolla:
+```
+source venv/bin/activate
+
+```
+
+Lataa riippuvuudet komennolla:
+```
+pip install -r requirements.txt
+```
+Luo tietokannat seuraavalla komennolla:
+```
+psql < schema.sql
+```
+Nyt sovelluksen voi käynnistää komennolla:
+```
+flask run
+```
