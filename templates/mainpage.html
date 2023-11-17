@@ -5,25 +5,15 @@
 Choose what's in your fridge:
 <p>
 
-</p>
 <form action="/send" method="POST">
-<input type="checkbox" name="cb" value="1"> milk
-<input type="checkbox" name="cb" value="2"> eggs
-<input type="checkbox" name="cb" value="3"> bread
-<input type="checkbox" name="cb" value="4"> juice
-<input type="checkbox" name="cb" value="5"> apple
-<input type="checkbox" name="cb" value="6"> banana
-<p>
-<input type="submit" value="Send">
+{%for i in range(1, length)%} 
+  <input type="checkbox" name="cb" value={{ i }}> {{ options[i] }}
+  <br>
+  {%endfor%}
+  <br>
+  <input type="submit" value="Send">
 </form>
-<hr>
-
-<!<ul>
-    {% for i in ing_list %}
-    <input type="checkbox" name="os" value="i"> str(ing_list)
-    {% endfor %}
-</ul>>
-
+<br>
 
 
 <a href="/logout">Kirjaudu ulos</a>

@@ -33,12 +33,9 @@ def logout():
 
 @app.route("/mainpage")
 def mainpage():
-    #sql = "SELECT ingredient FROM ingredients"
-    #result = db.session.execute(sql)
-    #ing_list = result.fetchall()
-
-    choices = ["milk", "eggs"]
-    return render_template("mainpage.html", choices=choices)
+    options=DatabaseMethods().get_ingredient_options()
+    length=len(options)
+    return render_template("mainpage.html", options=options, length=length)
 
 @app.route("/send", methods=["POST"])
 def send():
@@ -63,14 +60,12 @@ def choices():
     result = db.session.execute(sql, {"user_id":user_id})
     selected_str = result.fetchone()[0]
     selected= ast.literal_eval(selected_str)
-    print(selected)
     ing_names=[]
     for i in selected:
         sql = text("SELECT name FROM ingredients WHERE id=:id_ing")
         result = db.session.execute(sql, {"id_ing":i})
         ing_name = result.fetchone()[0]
         ing_names.append(ing_name)
-    print(ing_names)
 
     return render_template("choices.html", ing_names=ing_names)
 

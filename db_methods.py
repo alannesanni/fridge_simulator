@@ -41,3 +41,12 @@ class DatabaseMethods:
                 return         
             else:
                 raise Exception("Invalid username or password")
+            
+    def get_ingredient_options(self):
+        sql = text("SELECT name FROM ingredients")
+        result = db.session.execute(sql)
+        all = result.fetchall()
+        options=["x"]
+        for i in all:
+             options.append(i[0])
+        return options
