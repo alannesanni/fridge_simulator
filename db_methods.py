@@ -3,9 +3,24 @@ from sqlalchemy.sql import text
 import re
 from werkzeug.security import check_password_hash, generate_password_hash
 
+import json
+
+
+
 class DatabaseMethods:
     def __init__(self):
         pass
+
+    def add_ingredients_to_db(self):
+        with open("ingredients.json") as f:
+            data=json.load(f)
+        data=data["ingredients"]
+        for i in data:
+            sql = text("INSERT INTO ingredients (name, place) VALUES (:name, :place)")
+            db.session.execute(sql, {"name":i["name"], "place":i["place"]})
+            db.session.commit()
+        
+
     def validate(self, username, password):
         if not username or not password:
             raise Exception("Username and password are required")
@@ -43,10 +58,32 @@ class DatabaseMethods:
                 raise Exception("Invalid username or password")
             
     def get_ingredient_options(self):
-        sql = text("SELECT name FROM ingredients")
+        sql = text("SELECT name, place FROM ingredients")
         result = db.session.execute(sql)
         all = result.fetchall()
         options=["x"]
         for i in all:
-             options.append(i[0])
+            options.append(i[0])
         return options
+
+
+        #options_fridge=["x"]
+        #options_pantry=["x"]
+        #for i in all:
+        #    if i[1]=="fridge":
+        #        options_fridge.append(i[0])
+        #    if i[1]=="pantry":
+        #        options_pantry.append(i[0])
+        #return (options_fridge, options_pantry)
+    
+    def is_ingredients_empty(self):
+        sql = text("SELECT * FROM ingredients")
+        result = db.session.execute(sql)
+        all = result.fetchall()
+        if all:
+            return False
+        return True
+
+
+        
+    

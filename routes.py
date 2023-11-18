@@ -11,6 +11,8 @@ from db_methods import DatabaseMethods
 
 @app.route("/")
 def index():
+    if DatabaseMethods().is_ingredients_empty():
+        DatabaseMethods().add_ingredients_to_db()
     return render_template("index.html")
 
 @app.route("/login",methods=["POST"])
@@ -20,7 +22,7 @@ def login():
     try:
         DatabaseMethods().check_login(username, password)
         session["username"] = username
-        return redirect("/mainpage")
+        return redirect("/home")
     except Exception as error:
             flash(str(error))
             return redirect("/")         
@@ -30,46 +32,6 @@ def login():
 def logout():
     del session["username"]
     return redirect("/")
-
-@app.route("/mainpage")
-def mainpage():
-    options=DatabaseMethods().get_ingredient_options()
-    length=len(options)
-    return render_template("mainpage.html", options=options, length=length)
-
-@app.route("/send", methods=["POST"])
-def send():
-    username=session["username"]
-    sql = text("SELECT id FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username":username})
-    user_id = result.fetchone()[0]
-    selected=request.form.getlist('cb')
-    sql = text("UPDATE selected_ingredients SET selected =:selected WHERE id =:user_id")
-    db.session.execute(sql, {"selected":selected, "user_id":user_id})
-    db.session.commit()
-
-    return redirect("/selections")
-
-@app.route("/selections")
-def choices():
-    username=session["username"]
-    sql = text("SELECT id FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username":username})
-    user_id = result.fetchone()[0]
-    sql = text("SELECT selected FROM selected_ingredients WHERE id=:user_id")
-    result = db.session.execute(sql, {"user_id":user_id})
-    selected_str = result.fetchone()[0]
-    selected= ast.literal_eval(selected_str)
-    ing_names=[]
-    for i in selected:
-        sql = text("SELECT name FROM ingredients WHERE id=:id_ing")
-        result = db.session.execute(sql, {"id_ing":i})
-        ing_name = result.fetchone()[0]
-        ing_names.append(ing_name)
-
-    return render_template("choices.html", ing_names=ing_names)
-
-
 
 @app.route("/register", methods=["GET","POST"])
 def register():
@@ -95,3 +57,55 @@ def register():
         except Exception as error:
             flash(str(error))
             return redirect("/register")
+
+@app.route("/test")
+def test():
+    return render_template("test.html")
+
+@app.route("/update")
+def mainpage():
+    options=DatabaseMethods().get_ingredient_options()
+    length=len(options)
+    return render_template("update.html", options=options, length=length)
+
+@app.route("/send", methods=["POST"])
+def send():
+    username=session["username"]
+    sql = text("SELECT id FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
+    user_id = result.fetchone()[0]
+    selected=request.form.getlist('cb')
+    sql = text("UPDATE selected_ingredients SET selected =:selected WHERE id =:user_id")
+    db.session.execute(sql, {"selected":selected, "user_id":user_id})
+    db.session.commit()
+
+    return redirect("/home")
+
+@app.route("/home")
+def home():
+    username=session["username"]
+    sql = text("SELECT id FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
+    user_id = result.fetchone()[0]
+    sql = text("SELECT selected FROM selected_ingredients WHERE id=:user_id")
+    result = db.session.execute(sql, {"user_id":user_id})
+    selected_str = result.fetchone()[0]
+    selected= ast.literal_eval(selected_str)
+    ing_names_fridge=[]
+    ing_names_pantry=[]
+    for i in selected:
+        sql = text("SELECT name, place FROM ingredients WHERE id=:id_ing")
+        result = db.session.execute(sql, {"id_ing":i})
+        ing = result.fetchone()
+        print(ing)
+        if ing[1]=="fridge":
+            ing_names_fridge.append(ing[0])
+        if ing[1]=="pantry":
+            ing_names_pantry.append(ing[0])
+
+
+    return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry)
+
+
+
+
