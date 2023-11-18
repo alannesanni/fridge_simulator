@@ -1,5 +1,10 @@
-<!DOCTYPE html>
-
+{% extends "layout.html" %}
+{% block navbar %}
+                <li><a href="/home">Home</a></li>
+                <li><a href="/update">Update ingredients</a></li>
+                <li><a href="/logout">Logout</a></li>
+                {% endblock %}
+{% block content %}
 <p>Olet kirjautunut nimellä {{ session.username }}</p>
 <hr>
 Choose what's in your fridge:
@@ -14,6 +19,4 @@ Choose what's in your fridge:
   <input type="submit" value="Send">
 </form>
 <br>
-
-
-<a href="/logout">Kirjaudu ulos</a>
+{% endblock %}

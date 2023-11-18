@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block navbar %}
+                <li><a href="/home">Home</a></li>
+                <li><a href="/update">Update ingredients</a></li>
+                <li><a href="/logout">Logout</a></li>
+                {% endblock %}
+
+{% block content %}
+<p>Olet kirjautunut nimellä {{ session.username }}</p>
+<hr>
+You have these products in your fridge:
+<ul>
+
+{% for i in ing_names_fridge %}
+<li> {{ i }}
+{% endfor %}
+</ul>
+
+You have these products in your pantry:
+<ul>
+
+{% for i in ing_names_pantry %}
+<li> {{ i }}
+{% endfor %}
+</ul>
+<hr>
+{% endblock %}

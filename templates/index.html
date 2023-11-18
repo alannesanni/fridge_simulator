@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-
+{% extends "layout.html" %}
+{% block content %}
+Login: 
 <form action="/login" method="POST">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -16,4 +17,5 @@
 <input type="password" name="password"></p>
 <input type="submit" value="Kirjaudu">
 </form>
-<a href="/register">Rekisteröidy</a>
+
+{% endblock %}
