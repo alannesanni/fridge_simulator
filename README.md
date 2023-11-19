@@ -1,5 +1,5 @@
 # Fridge simulator
-Sovelluksessa voi listata, mitä kaikkia aineksia jääkaapista löytyy ja sovellus ehdottaa käyttäjälle reseptejä, joihin käyttäjällä on kotona ainekset. Jokainen käyttäjä on peruskäyttäjä tai ylläpitäjä.
+Sovelluksessa voi listata, mitä kaikkia aineksia kotoa löytyy ja sovellus ehdottaa käyttäjälle reseptejä, joihin käyttäjällä on ainekset. Jokainen käyttäjä on peruskäyttäjä tai ylläpitäjä.
 
 **Sovelluksen ominaisuuksia**
 * Käyttäjä voi rekisteröityä sekä kirjautua sisään ja ulos.
@@ -10,6 +10,13 @@ Sovelluksessa voi listata, mitä kaikkia aineksia jääkaapista löytyy ja sovel
 * Käyttäjä voi poistaa reseptiltä tykkäyksen.
 * Ylläpitäjä voi lisätä sovellukseen puuttuvia valittavia aineksia ja uusia reseptejä.
   
+
+**Tällä hetkellä sovelluksesta löytyy seuraavat ominaisuudet:**
+* Käyttäjä voi rekisteröityä sekä kirjautua sisään ja ulos.
+* Käyttäjä voi päivittää häneltä löytyvät ainekset, mutta päivityksen yhteydessä aikaisemmin valitut ainekset nollautuva. Kaikki haluttavat ainekset pitää siis valita kerrallaan listasta.
+* Sovellus ehdottaa käyttäjälle reseptejä mihin käyttäjältä löytyy ainekset, resepteistä ei näy käyttäjälle vielä muuta kun reseptin nimi.
+
+Testausta helpottamaan: Reseptejä löytyy valitsemalla esimerkiksi seuraavat ainesosat: *Chicken Breast, Rice*, *Olive Oil tai Broccoli, Cheese, Pasta*
 
 **Käynnistysohjeet**
 
@@ -46,3 +53,8 @@ Nyt sovelluksen voi käynnistää komennolla:
 ```
 flask run
 ```
+
+
+**Laajojen kielimallien käyttö**
+
+[ingredients.json](https://github.com/alannesanni/fridge_simulator/blob/main/ingredients.json) ja [recipes.json](https://github.com/alannesanni/fridge_simulator/blob/main/recipes.json) tiedostojen sisällöt on luotu ChatGPT:n avulla.
