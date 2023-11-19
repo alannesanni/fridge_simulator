@@ -20,7 +20,7 @@ Testausta helpottamaan: Reseptejä löytyy valitsemalla esimerkiksi seuraavat ai
 
 **Käynnistysohjeet**
 
-Kloonaa ensin repositorio koneellesi.
+Lataa ensin repositorio koneellesi.
 
 Luo repositorion juurikansioon tiedosto .env ja lisää sinne seuraavat:
 
