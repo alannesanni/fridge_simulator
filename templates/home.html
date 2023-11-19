@@ -24,4 +24,13 @@ You have these products in your pantry:
 {% endfor %}
 </ul>
 <hr>
+You can make these recipes with your ingredients:
+<ul>
+
+    {% for i in recipes %}
+    <li> {{ i }}
+    {% endfor %}
+    </ul>
+
+<hr>
 {% endblock %}

@@ -1,0 +1,105 @@
+{
+    "recipes": [
+      {
+        "name": "Simple Chicken and Rice",
+        "ingredients": ["Chicken Breast", "Rice", "Olive Oil"],
+        "instructions": "Cook chicken breast, prepare rice, and drizzle with olive oil."
+      },
+      {
+        "name": "Broccoli and Cheese Pasta",
+        "ingredients": ["Broccoli", "Cheese", "Pasta"],
+        "instructions": "Boil pasta, steam broccoli, mix with cheese, and season with salt and pepper."
+      },
+      {
+        "name": "Turkey and Avocado Wrap",
+        "ingredients": ["Ground Turkey", "Tortillas", "Avocado"],
+        "instructions": "Cook ground turkey, warm tortillas, and assemble with sliced avocado."
+      },
+      {
+        "name": "Tomato and Mozzarella Salad",
+        "ingredients": ["Tomato", "Cheese", "Balsamic Vinegar", "Olive Oil", "Bread"],
+        "instructions": "Slice tomatoes and cheese, arrange on a plate, drizzle with balsamic vinegar and olive oil. Serve with toasted bread."
+      },
+      {
+        "name": "Soy-Ginger Chicken Stir-Fry",
+        "ingredients": ["Chicken Breast", "Soy Sauce", "Ginger", "Rice", "Vegetables"],
+        "instructions": "Stir-fry chicken with soy sauce and ginger. Serve over rice with sautéed vegetables."
+      },
+      {
+        "name": "Black Bean and Corn Quesadilla",
+        "ingredients": ["Black Beans", "Tortillas", "Cheese", "Salsa", "Cilantro"],
+        "instructions": "Mix black beans and corn. Spread on tortillas, add cheese, salsa, and cilantro. Fold and cook until cheese melts."
+      },
+      {
+        "name": "Ground Beef and Sweet Potato Skillet",
+        "ingredients": ["Ground Beef", "Sweet Potato", "Onion", "Garlic", "Paprika"],
+        "instructions": "Cook ground beef with sweet potato, onion, and garlic. Season with paprika."
+      },
+      {
+        "name": "Quinoa Salad with Chickpeas",
+        "ingredients": ["Quinoa", "Chickpeas", "Cucumber", "Tomato", "Lemon"],
+        "instructions": "Cook quinoa, mix with chickpeas, diced cucumber, and tomato. Squeeze lemon juice over and toss."
+      },
+      {
+        "name": "Spinach and Mushroom Omelette",
+        "ingredients": ["Eggs", "Spinach", "Mushrooms", "Cheese", "Thyme"],
+        "instructions": "Sauté mushrooms and spinach. Pour beaten eggs over, add cheese and thyme. Cook into an omelette."
+      },
+      {
+        "name": "Balsamic-Glazed Chicken Salad",
+        "ingredients": ["Chicken Breast", "Lettuce", "Cherry Tomatoes", "Balsamic Vinegar", "Olive Oil"],
+        "instructions": "Grill chicken, toss lettuce and cherry tomatoes. Drizzle with a mixture of balsamic vinegar and olive oil."
+      },
+      {
+        "name": "Cheesy Garlic Bread",
+        "ingredients": ["Bread", "Cheese", "Garlic"],
+        "instructions": "Mix grated cheese and minced garlic. Spread on slices of bread and toast until cheese is melted."
+      },
+      {
+        "name": "Chicken and Broccoli Alfredo",
+        "ingredients": ["Chicken Breast", "Broccoli", "Pasta", "Parmesan Cheese", "Garlic"],
+        "instructions": "Cook chicken and broccoli, prepare pasta. In a pan, mix Alfredo sauce, garlic, and Parmesan cheese. Combine with cooked ingredients."
+      },
+      {
+        "name": "Ground Beef and Black Bean Burritos",
+        "ingredients": ["Ground Beef", "Black Beans", "Tortillas", "Lettuce", "Salsa"],
+        "instructions": "Cook ground beef, warm black beans, and assemble burritos with tortillas, lettuce, and salsa."
+      },
+      {
+        "name": "Oregano-Lemon Chicken",
+        "ingredients": ["Chicken Breast", "Oregano", "Lemon", "Olive Oil", "Garlic"],
+        "instructions": "Marinate chicken in a mixture of oregano, lemon juice, olive oil, and minced garlic. Grill or bake until cooked through."
+      },
+      {
+        "name": "Quinoa and Chickpea Stuffed Peppers",
+        "ingredients": ["Quinoa", "Chickpeas", "Bell Pepper", "Tomato", "Cilantro"],
+        "instructions": "Cook quinoa and chickpeas. Mix with diced tomatoes and cilantro. Stuff bell peppers and bake until tender."
+      },
+      {
+        "name": "Caprese Salad",
+        "ingredients": ["Tomato", "Cheese", "Balsamic Vinegar", "Olive Oil", "Salt"],
+        "instructions": "Slice tomatoes and cheese, arrange on a plate. Drizzle with balsamic vinegar and olive oil. Sprinkle with salt."
+      },
+      {
+        "name": "Couscous and Vegetable Stir-Fry",
+        "ingredients": ["Couscous", "Vegetables", "Soy Sauce", "Ginger", "Garlic"],
+        "instructions": "Cook couscous, stir-fry mixed vegetables with soy sauce, ginger, and garlic. Mix together."
+      },
+      {
+        "name": "Sweet Potato and Chickpea Curry",
+        "ingredients": ["Sweet Potato", "Chickpeas", "Onion", "Garlic", "Coconut Milk"],
+        "instructions": "Cook sweet potatoes, onions, and garlic. Add chickpeas and coconut milk. Simmer until flavors meld."
+      },
+      {
+        "name": "Mushroom and Onion Omelette",
+        "ingredients": ["Eggs", "Mushrooms", "Onion", "Cheese", "Thyme"],
+        "instructions": "Sauté mushrooms and onions. Pour beaten eggs over, add cheese and thyme. Cook into an omelette."
+      },
+      {
+        "name": "Honey Mustard Chicken Skewers",
+        "ingredients": ["Chicken Breast", "Mustard", "Honey", "Soy Sauce", "Ground Cumin"],
+        "instructions": "Mix mustard, honey, soy sauce, and ground cumin. Marinate chicken and thread onto skewers. Grill until cooked."
+      }
+    ]
+  }
+  

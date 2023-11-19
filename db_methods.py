@@ -2,7 +2,7 @@ from db import db
 from sqlalchemy.sql import text
 import re
 from werkzeug.security import check_password_hash, generate_password_hash
-
+import ast
 import json
 
 
@@ -19,6 +19,25 @@ class DatabaseMethods:
             sql = text("INSERT INTO ingredients (name, place) VALUES (:name, :place)")
             db.session.execute(sql, {"name":i["name"], "place":i["place"]})
             db.session.commit()
+
+    def add_recipes_to_db(self):
+        with open("recipes.json") as a:
+            data=json.load(a)
+        data=data["recipes"]
+        for i in data:
+            try:
+                ingredient_ids=[]
+                for j in i["ingredients"]:
+                    print(j)
+                    sql = text("SELECT id FROM ingredients WHERE name=:name")
+                    result = db.session.execute(sql, {"name":j})
+                    ing_id = result.fetchone()[0]
+                    ingredient_ids.append(ing_id)
+                sql = text("INSERT INTO recipes (name, ingredient_ids, instructions) VALUES (:name, :ingredient_ids, :instructions)")
+                db.session.execute(sql, {"name":i["name"], "ingredient_ids":ingredient_ids, "instructions":i["instructions"]})
+                db.session.commit()
+            except:
+                continue
         
 
     def validate(self, username, password):
@@ -83,6 +102,40 @@ class DatabaseMethods:
         if all:
             return False
         return True
+
+    def is_recipes_empty(self):
+        sql = text("SELECT * FROM recipes")
+        result = db.session.execute(sql)
+        all = result.fetchall()
+        if all:
+            return False
+        return True
+    
+    def check_which_recipes_can_be_made(self, username):
+        sql = text("SELECT selected FROM selected_ingredients WHERE id=(SELECT id FROM users WHERE username=:username)")
+        result = db.session.execute(sql, {"username":username})
+        ing_ids_str = result.fetchone()[0]
+        users_ing_ids=list(ast.literal_eval(ing_ids_str))    
+
+        sql = text("SELECT name, ingredient_ids FROM recipes")
+        result = db.session.execute(sql)
+        recipes = result.fetchall()
+        recipes_that_can_be_made=[]
+        for i in recipes:
+            recipe_ing_ids=list(ast.literal_eval(i[1]))
+            if all(id in users_ing_ids for id in recipe_ing_ids):
+                recipes_that_can_be_made.append(i[0])
+
+        return recipes_that_can_be_made
+        
+
+
+        
+        
+
+
+        
+
 
 
         

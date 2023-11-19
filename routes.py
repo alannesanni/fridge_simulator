@@ -9,10 +9,14 @@ from db import db
 import ast
 from db_methods import DatabaseMethods
 
+db_methods = DatabaseMethods()
+
 @app.route("/")
 def index():
-    if DatabaseMethods().is_ingredients_empty():
-        DatabaseMethods().add_ingredients_to_db()
+    if db_methods.is_ingredients_empty():
+        db_methods.add_ingredients_to_db()
+    if db_methods.is_recipes_empty():
+        db_methods.add_recipes_to_db()
     return render_template("index.html")
 
 @app.route("/login",methods=["POST"])
@@ -20,7 +24,7 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
     try:
-        DatabaseMethods().check_login(username, password)
+        db_methods.check_login(username, password)
         session["username"] = username
         return redirect("/home")
     except Exception as error:
@@ -42,7 +46,7 @@ def register():
         password = request.form["password"]
 
         try:
-            DatabaseMethods().validate(username, password)
+            db_methods.validate(username, password)
             hash_password=generate_password_hash(password)
             sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
             db.session.execute(sql, {"username":username, "password":hash_password})
@@ -64,7 +68,7 @@ def test():
 
 @app.route("/update")
 def mainpage():
-    options=DatabaseMethods().get_ingredient_options()
+    options=db_methods.get_ingredient_options()
     length=len(options)
     return render_template("update.html", options=options, length=length)
 
@@ -103,9 +107,11 @@ def home():
         if ing[1]=="pantry":
             ing_names_pantry.append(ing[0])
 
-
-    return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry)
-
+    recipes=db_methods.check_which_recipes_can_be_made(username)
+    if recipes:
+        return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=recipes)
+    else:
+        return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=["No recipes"])
 
 
 

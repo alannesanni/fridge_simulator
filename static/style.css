@@ -8,7 +8,7 @@ h1{
 }
 .navbar ul{
     list-style-type: none;
-    background-color: hsl(177, 53%, 59%);
+    background-color: hsl(182, 73%, 78%);
     padding: 0px;
     margin: 0px;
     overflow: hidden;
@@ -21,7 +21,7 @@ h1{
     text-align: center;
 }
 .navbar a:hover{
-    background-color: hwb(196 19% 57%);
+    background-color: hwb(195 42% 29%);
 }
 .navbar li{
     float: left;
