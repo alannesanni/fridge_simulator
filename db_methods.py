@@ -11,7 +11,7 @@ class DatabaseMethods:
         pass
 
     def add_ingredients_to_db(self):
-        with open("ingredients.json", "r", encoding="utc-8") as file:
+        with open("ingredients.json") as file:
             data = json.load(file)
         data = data["ingredients"]
         for i in data:
@@ -21,7 +21,7 @@ class DatabaseMethods:
             db.session.commit()
 
     def add_recipes_to_db(self):
-        with open("recipes.json", "r", encoding="utc-8") as file:
+        with open("recipes.json") as file:
             data = json.load(file)
         data = data["recipes"]
         for i in data:
