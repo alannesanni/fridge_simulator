@@ -12,7 +12,8 @@ Choose what ingredients you have:
 
 <form action="/send" method="POST">
 {%for i in range(1, length)%} 
-  <input type="checkbox" name="cb" value={{ i }}> {{ options[i] }}
+  <input type="checkbox" name="cb" value={{ i }} id="ingredient-{{i}}">
+  <label for="ingredient-{{loop.index0}}">{{options[i]}}</label>
   <br>
   {%endfor%}
   <br>
