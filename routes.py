@@ -13,7 +13,6 @@ def index():
         db_methods.add_recipes_to_db()
     return render_template("index.html")
 
-
 @app.route("/login", methods=["POST"])
 def login():
     username = request.form["username"]
@@ -26,12 +25,10 @@ def login():
         flash(str(error))
         return redirect("/")
 
-
 @app.route("/logout")
 def logout():
     del session["username"]
     return redirect("/")
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -50,13 +47,13 @@ def register():
             flash(str(error))
             return redirect("/register")
 
-
 @app.route("/update")
 def mainpage():
+    username = session["username"]
     options = db_methods.get_ingredient_options()
     length = len(options)
-    return render_template("update.html", options=options, length=length)
-
+    selected = db_methods.get_selected_ingredients(username, "id")
+    return render_template("update.html", options=options, length=length, selected=selected)
 
 @app.route("/send", methods=["POST"])
 def send():
@@ -64,7 +61,6 @@ def send():
     selected = request.form.getlist('cb')
     db_methods.update_selected_ingredients(username, selected)
     return redirect("/home")
-
 
 @app.route("/home")
 def home():
@@ -78,6 +74,7 @@ def home():
         return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=recipes)
 
     return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=["No recipes"])
+
 @app.route("/recipe/<recipe_name>")
 def recipe(recipe_name):
     recipe=db_methods.get_recipe(recipe_name)
