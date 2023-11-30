@@ -142,7 +142,7 @@ class DatabaseMethods:
         db.session.execute(sql, {"selected": selected, "user_id": user_id})
         db.session.commit()
 
-    def get_selected_ingredients(self, username):
+    def get_selected_ingredients(self, username, form):
         sql = text("SELECT id FROM users WHERE username=:username")
         result = db.session.execute(sql, {"username": username})
         user_id = result.fetchone()[0]
@@ -150,6 +150,8 @@ class DatabaseMethods:
         result = db.session.execute(sql, {"user_id": user_id})
         selected_str = result.fetchone()[0]
         selected = ast.literal_eval(selected_str)
+        if form == "id":
+            return selected
         ing_names_fridge = []
         ing_names_pantry = []
         for i in selected:
@@ -162,3 +164,19 @@ class DatabaseMethods:
             if ing[1] == "pantry":
                 ing_names_pantry.append(ing[0])
         return (ing_names_fridge, ing_names_pantry)
+    
+    def get_recipe(self, recipe_name):
+        sql = text("SELECT name, ingredient_ids, instructions FROM recipes WHERE name =:recipe_name")
+        result = db.session.execute(sql, {"recipe_name": recipe_name})
+        recipe = result.fetchone()
+        ingredients_id = list(ast.literal_eval(recipe[1]))
+        ing_names=[]
+        for i in  ingredients_id:
+            sql = text("SELECT name FROM ingredients WHERE id=:ing_id")
+            result = db.session.execute(sql, {"ing_id": i})
+            ing = result.fetchone()[0]
+            ing_names.append(ing)
+        return (recipe[0], ing_names, recipe[2])
+
+
+

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block navbar %}
+                <li><a href="/home">Home</a></li>
+                <li><a href="/update">Update ingredients</a></li>
+                <li><a href="/logout">Logout</a></li>
+                {% endblock %}
+                
+{% block content %}
+<h2>{{recipe_name}}</h2>
+<br>
+{{recipe_ingredients}}
+<br>
+{{recipe_instructions}}
+{% endblock %}

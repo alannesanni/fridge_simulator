@@ -69,7 +69,7 @@ def send():
 @app.route("/home")
 def home():
     username = session["username"]
-    selected_ing = db_methods.get_selected_ingredients(username)
+    selected_ing = db_methods.get_selected_ingredients(username, "name")
     ing_names_fridge = selected_ing[0]
     ing_names_pantry = selected_ing[1]
 
@@ -78,3 +78,8 @@ def home():
         return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=recipes)
 
     return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=["No recipes"])
+@app.route("/recipe/<recipe_name>")
+def recipe(recipe_name):
+    recipe=db_methods.get_recipe(recipe_name)
+    return render_template("recipe.html", recipe_name=recipe[0], recipe_ingredients=recipe[1], recipe_instructions=recipe[2])
+
