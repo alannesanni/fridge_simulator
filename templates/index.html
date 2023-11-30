@@ -15,9 +15,9 @@
     {% endif %}
   {% endwith %}
 <p>Username:<br>
-<input type="text" name="username"></p>
+<input type="text" name="username" pattern="[A-Za-z]+" title="Only letters allowed" maxlength="20" required></p>
 <p>Password:<br>
-<input type="password" name="password"></p>
+<input type="password" name="password" required></p>
 <input type="submit" value="Login">
 </form>
 
