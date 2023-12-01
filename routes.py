@@ -78,5 +78,6 @@ def home():
 @app.route("/recipe/<recipe_name>")
 def recipe(recipe_name):
     recipe=db_methods.get_recipe(recipe_name)
-    return render_template("recipe.html", recipe_name=recipe[0], recipe_ingredients=recipe[1], recipe_instructions=recipe[2])
+    length_ing=len(recipe[1])
+    return render_template("recipe.html", recipe_name=recipe[0], recipe_ingredients=recipe[1], recipe_instructions=recipe[2], length_ing=length_ing)
 

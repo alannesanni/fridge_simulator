@@ -7,8 +7,16 @@
                 
 {% block content1 %}
 <h2>{{recipe_name}}</h2>
-<br>
-{{recipe_ingredients}}
-<br>
-{{recipe_instructions}}
+<h4> Ingredients:</h4>
+    <ul>
+    {%for i in range(0, length_ing)%} 
+    <li> {{recipe_ingredients[i]}}</li>
+    {%endfor%}
+</ul>
+
+{% endblock %}
+
+{% block content2 %}
+<h3> Instructions:</h3>
+    {{recipe_instructions}}
 {% endblock %}
