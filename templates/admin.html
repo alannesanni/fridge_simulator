@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block navbar %}
+                <li><a href="/home">Admin</a></li>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/update">Update ingredients</a></li>
+                <li><a href="/logout">Logout</a></li>
+                {% endblock %}
+{% block content1 %}
+<form action="/add_ingredient" method="POST">
+<h3>Add new ingredient:</h3>
+<br>
+Ingredient name:
+<br>
+ <input type="text" name="name" pattern="[A-Za-z]+" maxlength="20" required></p>
+Ingredient storage place:
+<br>
+<input type="radio" name="place" id="fridge" value="fridge"> Fridge </input><br>
+<input type="radio" name="place" id="pantry" value="pantry"> Pantry </input><br>
+<br>
+<input type="submit" value="Send">
+</form>
+{% endblock %}

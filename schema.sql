@@ -1,4 +1,4 @@
-CREATE TABLE users (id SERIAL PRIMARY KEY, username TEXT, password TEXT);
+CREATE TABLE users (id SERIAL PRIMARY KEY, username TEXT, password TEXT, role TEXT);
 
 CREATE TABLE ingredients (id SERIAL PRIMARY KEY, name TEXT, place TEXT);
 

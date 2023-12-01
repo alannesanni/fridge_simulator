@@ -41,6 +41,13 @@ class DatabaseMethods:
             except:
                 continue
 
+    def add_ingredient(self, name:str, place:str):
+        sql = text(
+                "INSERT INTO ingredients (name, place) VALUES (:name, :place)")
+        db.session.execute(sql, {"name": name, "place": place})
+        db.session.commit()
+
+
     def validate(self, username, password):
         if not username or not password:
             raise Exception("Username and password are required")
@@ -85,7 +92,7 @@ class DatabaseMethods:
         return options
 
     def is_ingredients_empty(self):
-        sql = text("SELECT * FROM ingredients")
+        sql = text("SELECT name FROM ingredients")
         result = db.session.execute(sql)
         all = result.fetchall()
         if all:
@@ -93,13 +100,21 @@ class DatabaseMethods:
         return True
 
     def is_recipes_empty(self):
-        sql = text("SELECT * FROM recipes")
+        sql = text("SELECT name FROM recipes")
         result = db.session.execute(sql)
         all = result.fetchall()
         if all:
             return False
         return True
 
+    def is_users_empty(self):
+        sql = text("SELECT username FROM users")
+        result = db.session.execute(sql)
+        all = result.fetchall()
+        if all:
+            return False
+        return True
+    
     def check_which_recipes_can_be_made(self, username):
         sql = text(
             "SELECT selected FROM selected_ingredients WHERE id=(SELECT id FROM users WHERE username=:username)")
@@ -118,12 +133,12 @@ class DatabaseMethods:
 
         return recipes_that_can_be_made
 
-    def add_user_to_db(self, username, password):
+    def add_user_to_db(self, username, password, role):
         hash_password = generate_password_hash(password)
         sql = text(
-            "INSERT INTO users (username, password) VALUES (:username, :password)")
+            "INSERT INTO users (username, password, role) VALUES (:username, :password, :role)")
         db.session.execute(
-            sql, {"username": username, "password": hash_password})
+            sql, {"username": username, "password": hash_password, "role": role})
         db.session.commit()
         sql = text("SELECT id FROM users WHERE username=:username")
         result = db.session.execute(sql, {"username": username})
@@ -177,6 +192,14 @@ class DatabaseMethods:
             ing = result.fetchone()[0]
             ing_names.append(ing)
         return (recipe[0], ing_names, recipe[2])
+    
+
+    def get_role(self, username):
+        sql = text("SELECT role FROM users WHERE username=:username")
+        result = db.session.execute(sql, {"username": username})
+        user_role= result.fetchone()[0]
+        return user_role
+
 
 
 

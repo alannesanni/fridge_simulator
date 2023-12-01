@@ -7,10 +7,15 @@ db_methods = DatabaseMethods()
 
 @app.route("/")
 def index():
+    if db_methods.is_users_empty():
+        db_methods.add_user_to_db("admin", "admin123", "admin")
+        
     if db_methods.is_ingredients_empty():
         db_methods.add_ingredients_to_db()
+
     if db_methods.is_recipes_empty():
         db_methods.add_recipes_to_db()
+    session["role"] = "user"
     return render_template("index.html")
 
 @app.route("/login", methods=["POST"])
@@ -20,14 +25,32 @@ def login():
     try:
         db_methods.check_login(username, password)
         session["username"] = username
+        role = db_methods.get_role(username)
+        session["role"] = role
+        if session["role"]=="admin":
+            return redirect("/admin")
         return redirect("/home")
     except Exception as error:
         flash(str(error))
         return redirect("/")
+    
+@app.route("/admin")
+def admin():
+    if session["role"]=="admin":
+            return render_template("admin.html")
+    return redirect("/")
+
+@app.route("/add_ingredient", methods=["POST"])
+def add_ingredient():
+    name = request.form["name"]
+    place = request.form["place"]
+    db_methods.add_ingredient(name, place)
+    return redirect("/admin")
 
 @app.route("/logout")
 def logout():
     del session["username"]
+    session["role"]="user"
     return redirect("/")
 
 @app.route("/register", methods=["GET", "POST"])
@@ -40,7 +63,7 @@ def register():
 
         try:
             db_methods.validate(username, password)
-            db_methods.add_user_to_db(username, password)
+            db_methods.add_user_to_db(username, password, "user")
             return redirect("/")
 
         except Exception as error:
@@ -80,4 +103,3 @@ def recipe(recipe_name):
     recipe=db_methods.get_recipe(recipe_name)
     length_ing=len(recipe[1])
     return render_template("recipe.html", recipe_name=recipe[0], recipe_ingredients=recipe[1], recipe_instructions=recipe[2], length_ing=length_ing)
-
