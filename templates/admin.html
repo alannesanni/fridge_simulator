@@ -20,3 +20,27 @@ Ingredient storage place:
 <input type="submit" value="Send">
 </form>
 {% endblock %}
+
+{% block content2 %}
+<form action="/add_recipe" method="POST">
+<h3>Add new recipe:</h3>
+<br>
+Recipe name:
+<br>
+ <input type="text" name="name" pattern="[A-Za-z]+" maxlength="20" required></p>
+Ingredients:
+<br>
+{%for i in range(1, length)%} 
+  <input type="checkbox" name="cb" value={{ i }} id="ingredient-{{i}}">
+  <label for="ingredient-{{loop.index}}">{{options[i]}}</label>
+  <br>
+  {%endfor%}
+  <br>
+
+Instructions:
+<br>
+<textarea name="instructions" rows="10" cols="50" maxlength="500" required></textarea>
+<br>
+<input type="submit" value="Send">
+</form>
+{% endblock %}

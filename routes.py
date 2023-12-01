@@ -37,7 +37,9 @@ def login():
 @app.route("/admin")
 def admin():
     if session["role"]=="admin":
-            return render_template("admin.html")
+            options = db_methods.get_ingredient_options()
+            length = len(options)
+            return render_template("admin.html", options=options, length=length)
     return redirect("/")
 
 @app.route("/add_ingredient", methods=["POST"])
@@ -45,6 +47,14 @@ def add_ingredient():
     name = request.form["name"]
     place = request.form["place"]
     db_methods.add_ingredient(name, place)
+    return redirect("/admin")
+
+@app.route("/add_recipe", methods=["POST"])
+def add_recipe():
+    name = request.form["name"]
+    ingredients = request.form.getlist('cb')
+    instructions = request.form["instructions"]
+    db_methods.add_recipe(name, ingredients, instructions)
     return redirect("/admin")
 
 @app.route("/logout")

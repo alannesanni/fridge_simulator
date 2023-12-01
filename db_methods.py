@@ -47,6 +47,14 @@ class DatabaseMethods:
         db.session.execute(sql, {"name": name, "place": place})
         db.session.commit()
 
+    def add_recipe(self, name:str, ingredients:list, instructions:str):
+        sql = text(
+            "INSERT INTO recipes (name, ingredient_ids, instructions) VALUES (:name, :ingredient_ids, :instructions)")
+        db.session.execute(sql, {
+                            "name": name, "ingredient_ids": ingredients, "instructions": instructions})
+        db.session.commit()
+
+
 
     def validate(self, username, password):
         if not username or not password:
