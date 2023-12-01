@@ -5,7 +5,7 @@
                 <li><a href="/logout">Logout</a></li>
                 {% endblock %}
 
-{% block content %}
+{% block content1 %}
 <p>You are loged in as {{ session.username }}</p>
 <hr>
 You have these products in your fridge:
@@ -24,6 +24,8 @@ You have these products in your pantry:
 {% endfor %}
 </ul>
 <hr>
+{% endblock %}
+{% block content2 %}
 You can make these recipes with your ingredients:
 <ul>
 
@@ -34,3 +36,4 @@ You can make these recipes with your ingredients:
 
 <hr>
 {% endblock %}
+

@@ -19,9 +19,20 @@
                 {% endblock %}
             </ul>
         </nav>
-        {% block content %}
 
-        {% endblock %}
+    <section class="columns">
+        <div class="column">
+            {% block content1 %}
+
+            {% endblock %}
+        </div>
+        <div class="column">
+            {% block content2 %}
+
+            {% endblock %}
+        </div>
+    </section>
+
         
     
     </body>

@@ -26,3 +26,27 @@ h1{
 .navbar li{
     float: left;
 }
+
+.wrapper {
+    padding: 5px;
+    margin: 10px;
+}
+
+.columns {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    margin: 5px;
+}
+
+.column {
+    flex: 1;
+    margin: 10px;
+}
+
+@media screen and (max-width: 680px) {
+    .columns .column {
+        flex-basis: 100%;
+        margin: 5px;
+    }
+}
