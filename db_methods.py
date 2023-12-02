@@ -4,7 +4,42 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import ast
 import json
 from db import db
+import user_methods
+from flask import session
 
+def initialize_db():
+    if is_users_empty():
+        user_methods.add_user_to_db("admin", "admin123", "admin")
+        
+    if is_ingredients_empty():
+        add_ingredients_to_db()
+
+    if is_recipes_empty():
+        add_recipes_to_db()
+
+def is_ingredients_empty():
+    sql = text("SELECT name FROM ingredients")
+    result = db.session.execute(sql)
+    all = result.fetchall()
+    if all:
+        return False
+    return True
+
+def is_recipes_empty():
+    sql = text("SELECT name FROM recipes")
+    result = db.session.execute(sql)
+    all = result.fetchall()
+    if all:
+        return False
+    return True
+
+def is_users_empty():
+    sql = text("SELECT username FROM users")
+    result = db.session.execute(sql)
+    all = result.fetchall()
+    if all:
+        return False
+    return True
 
 def add_ingredients_to_db():
     with open("ingredients.json") as file:
@@ -50,42 +85,6 @@ def add_recipe(name:str, ingredients:list, instructions:str):
                         "name": name, "ingredient_ids": ingredients, "instructions": instructions})
     db.session.commit()
 
-
-
-def validate(username, password):
-    if not username or not password:
-        raise Exception("Username and password are required")
-    if not re.match("^[a-z]+$", username):
-        raise Exception("Username can only contain letters a-z")
-
-    sql = text("SELECT * FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    length = len(result.fetchall())
-    if length != 0:
-        raise Exception(f"User with username {username} already exists")
-
-    if len(username) < 3:
-        raise Exception("Username too short")
-    if len(password) < 5:
-        raise Exception("Password too short")
-
-    if re.match("^[a-z]+$", password):
-        raise Exception("Password can't only contain letters")
-
-def check_login(username, password):
-    if not username or not password:
-        raise Exception("Username and password are required")
-    sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user = result.fetchone()
-    if not user:
-        raise Exception("Invalid username or password")
-
-    hash_value = user.password
-    if check_password_hash(hash_value, password):
-        return
-    raise Exception("Invalid username or password")
-
 def get_ingredient_options():
     sql = text("SELECT name, place FROM ingredients")
     result = db.session.execute(sql)
@@ -95,31 +94,8 @@ def get_ingredient_options():
         options.append(i[0])
     return options
 
-def is_ingredients_empty():
-    sql = text("SELECT name FROM ingredients")
-    result = db.session.execute(sql)
-    all = result.fetchall()
-    if all:
-        return False
-    return True
-
-def is_recipes_empty():
-    sql = text("SELECT name FROM recipes")
-    result = db.session.execute(sql)
-    all = result.fetchall()
-    if all:
-        return False
-    return True
-
-def is_users_empty():
-    sql = text("SELECT username FROM users")
-    result = db.session.execute(sql)
-    all = result.fetchall()
-    if all:
-        return False
-    return True
-
-def check_which_recipes_can_be_made(username):
+def check_which_recipes_can_be_made():
+    username = session["username"]
     sql = text(
         "SELECT selected FROM selected_ingredients WHERE id=(SELECT id FROM users WHERE username=:username)")
     result = db.session.execute(sql, {"username": username})
@@ -137,22 +113,8 @@ def check_which_recipes_can_be_made(username):
 
     return recipes_that_can_be_made
 
-def add_user_to_db(username, password, role):
-    hash_password = generate_password_hash(password)
-    sql = text(
-        "INSERT INTO users (username, password, role) VALUES (:username, :password, :role)")
-    db.session.execute(
-        sql, {"username": username, "password": hash_password, "role": role})
-    db.session.commit()
-    sql = text("SELECT id FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user_id = result.fetchone()[0]
-    sql = text(
-        "INSERT INTO selected_ingredients (id, selected) VALUES (:user_id, :empty_list)")
-    db.session.execute(sql, {"user_id": user_id, "empty_list": []})
-    db.session.commit()
-
-def update_selected_ingredients(username, selected):
+def update_selected_ingredients(selected):
+    username = session["username"]
     sql = text("SELECT id FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     user_id = result.fetchone()[0]
@@ -161,7 +123,8 @@ def update_selected_ingredients(username, selected):
     db.session.execute(sql, {"selected": selected, "user_id": user_id})
     db.session.commit()
 
-def get_selected_ingredients(username, form):
+def get_selected_ingredients(form):
+    username = session["username"]
     sql = text("SELECT id FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     user_id = result.fetchone()[0]
@@ -198,14 +161,8 @@ def get_recipe(recipe_name):
     return (recipe[0], ing_names, recipe[2])
 
 
-def get_role(username):
-    sql = text("SELECT role FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user_role= result.fetchone()[0]
-    return user_role
-
-
-def add_like(username, recipe_name):
+def add_like(recipe_name):
+    username = session["username"]
     sql = text("SELECT id FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     user_id = result.fetchone()[0]
@@ -218,7 +175,8 @@ def add_like(username, recipe_name):
         sql, {"user_id": user_id, "recipe_id": recipe_id})
     db.session.commit()
 
-def delete_like(username, recipe_name):
+def delete_like(recipe_name):
+    username = session["username"]
     sql = text("SELECT id FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     user_id = result.fetchone()[0]
@@ -231,7 +189,8 @@ def delete_like(username, recipe_name):
         sql, {"user_id": user_id, "recipe_id": recipe_id})
     db.session.commit()
 
-def check_has_user_liked_recipe(username, recipe_name):
+def check_has_user_liked_recipe(recipe_name):
+    username = session["username"]
     sql = text("SELECT id FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     user_id = result.fetchone()[0]

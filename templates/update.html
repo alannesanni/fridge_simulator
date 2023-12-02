@@ -10,7 +10,7 @@
 Choose what ingredients you have:
 <p>
 
-<form action="/send" method="POST">
+<form action="/update" method="POST">
 {%for i in range(1, length)%} 
   <input type="checkbox" name="cb" value={{ i }} id="ingredient-{{i}}" {% if i in selected %}checked{% endif %}>
   <label for="ingredient-{{loop.index}}">{{options[i]}}</label>
