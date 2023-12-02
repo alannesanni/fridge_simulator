@@ -50,3 +50,57 @@ h1{
         margin: 5px;
     }
 }
+
+.heart-checkbox {
+    position: relative;
+  }
+  
+.hidden-checkbox {
+    position: absolute;
+    left: -9999px;
+  }
+  
+.heart-label {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(161, 161, 161);
+    transform: rotate(-45deg);
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+.heart-label::before,
+.heart-label::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 25px;
+    background-color: rgb(161, 161, 161);
+    border-radius: 60%;
+    transition: background-color 0.3s;
+  }
+  
+.heart-label::before {
+    top: -10px;
+    left: 0;
+  }
+  
+.heart-label::after {
+    top: -3px;
+    left: 7px;
+    transform: rotate(90deg);
+  }
+  
+  /* Kun checkbox on valittu, muuta värit */
+.hidden-checkbox:checked + .heart-label {
+    background-color: red;
+  }
+  
+.hidden-checkbox:checked + .heart-label::before,
+.hidden-checkbox:checked + .heart-label::after {
+    background-color: red;
+  }
