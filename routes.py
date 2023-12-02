@@ -1,8 +1,6 @@
 from flask import redirect, render_template, request, session, flash
 from app import app
-from db_methods import DatabaseMethods
-
-db_methods = DatabaseMethods()
+import db_methods
 
 
 @app.route("/")
