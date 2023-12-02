@@ -15,11 +15,16 @@ def login():
     password = request.form["password"]
     try:
         user_methods.login(username, password)
+        try:
+            del session["login_data"]
+        except:
+            pass
         if session["role"]=="admin":
             return redirect("/admin")
         return redirect("/home")
     except Exception as error:
         flash(str(error))
+        session["login_data"] = {"username": username, "password": password}
         return redirect("/")
 
 @app.route("/logout")
@@ -37,9 +42,14 @@ def register():
         password = request.form["password"]
         try:
             user_methods.register(username, password)
+            try:
+                del session["register_data"]
+            except:
+                pass
             return redirect("/")
 
         except Exception as error:
+            session["register_data"] = {"username": username, "password": password}
             flash(str(error))
             return redirect("/register")
     

@@ -15,9 +15,9 @@
     {% endif %}
   {% endwith %}
 <p>Username:<br>
-<input type="text" name="username" pattern="[A-Za-z]+" title="Only letters allowed" maxlength="20" required></p>
+<input type="text" name="username" pattern="[A-Za-z]+" title="Only letters allowed" maxlength="20" required value="{{ session.get('login_data', {}).get('username', '') }}"></p>
 <p>Password:<br>
-<input type="password" name="password" required></p>
+<input type="password" name="password" required value="{{ session.get('login_data', {}).get('password', '') }}"></p>
 <input type="submit" value="Login">
 </form>
 
