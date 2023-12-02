@@ -16,7 +16,7 @@ def validate(username, password):
     if not re.match("^[a-z]+$", username):
         raise Exception("Username can only contain letters a-z")
 
-    sql = text("SELECT * FROM users WHERE username=:username")
+    sql = text("SELECT id FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     length = len(result.fetchall())
     if length != 0:
@@ -56,17 +56,18 @@ def check_login(username, password):
 
     hash_value = user.password
     if check_password_hash(hash_value, password):
-        return
+        return user.id
     raise Exception("Invalid username or password")
 
 def login(username, password):
-    check_login(username, password)
-    session["username"] = username
-    role = get_role(username)
+    user_id = check_login(username, password)
+    session["id"] = user_id
+    role = get_role()
     session["role"] = role
 
-def get_role(username):
-    sql = text("SELECT role FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
+def get_role():
+    user_id=session["id"]
+    sql = text("SELECT role FROM users WHERE id=:user_id")
+    result = db.session.execute(sql, {"user_id": user_id})
     user_role= result.fetchone()[0]
     return user_role

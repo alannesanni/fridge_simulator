@@ -59,7 +59,6 @@ def add_recipes_to_db():
         try:
             ingredient_ids = []
             for j in i["ingredients"]:
-                print(j)
                 sql = text("SELECT id FROM ingredients WHERE name=:name")
                 result = db.session.execute(sql, {"name": j})
                 ing_id = result.fetchone()[0]
@@ -95,13 +94,12 @@ def get_ingredient_options():
     return options
 
 def check_which_recipes_can_be_made():
-    username = session["username"]
+    user_id=session["id"]
     sql = text(
-        "SELECT selected FROM selected_ingredients WHERE id=(SELECT id FROM users WHERE username=:username)")
-    result = db.session.execute(sql, {"username": username})
+        "SELECT selected FROM selected_ingredients WHERE id=:user_id")
+    result = db.session.execute(sql, {"user_id": user_id})
     ing_ids_str = result.fetchone()[0]
     users_ing_ids = list(ast.literal_eval(ing_ids_str))
-
     sql = text("SELECT name, ingredient_ids FROM recipes")
     result = db.session.execute(sql)
     recipes = result.fetchall()
@@ -110,24 +108,17 @@ def check_which_recipes_can_be_made():
         recipe_ing_ids = list(ast.literal_eval(i[1]))
         if all(ing_id in users_ing_ids for ing_id in recipe_ing_ids):
             recipes_that_can_be_made.append(i[0])
-
     return recipes_that_can_be_made
 
 def update_selected_ingredients(selected):
-    username = session["username"]
-    sql = text("SELECT id FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user_id = result.fetchone()[0]
+    user_id=session["id"]
     sql = text(
-        "UPDATE selected_ingredients SET selected =:selected WHERE id =:user_id")
+        "UPDATE selected_ingredients SET selected =:selected WHERE id=:user_id")
     db.session.execute(sql, {"selected": selected, "user_id": user_id})
     db.session.commit()
 
 def get_selected_ingredients(form):
-    username = session["username"]
-    sql = text("SELECT id FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user_id = result.fetchone()[0]
+    user_id=session["id"]
     sql = text("SELECT selected FROM selected_ingredients WHERE id=:user_id")
     result = db.session.execute(sql, {"user_id": user_id})
     selected_str = result.fetchone()[0]
@@ -140,7 +131,6 @@ def get_selected_ingredients(form):
         sql = text("SELECT name, place FROM ingredients WHERE id=:id_ing")
         result = db.session.execute(sql, {"id_ing": i})
         ing = result.fetchone()
-        print(ing)
         if ing[1] == "fridge":
             ing_names_fridge.append(ing[0])
         if ing[1] == "pantry":
@@ -162,10 +152,7 @@ def get_recipe(recipe_name):
 
 
 def add_like(recipe_name):
-    username = session["username"]
-    sql = text("SELECT id FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user_id = result.fetchone()[0]
+    user_id=session["id"]
     sql = text("SELECT id FROM recipes WHERE name=:name")
     result = db.session.execute(sql, {"name": recipe_name})
     recipe_id = result.fetchone()[0]
@@ -176,10 +163,7 @@ def add_like(recipe_name):
     db.session.commit()
 
 def delete_like(recipe_name):
-    username = session["username"]
-    sql = text("SELECT id FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user_id = result.fetchone()[0]
+    user_id=session["id"]
     sql = text("SELECT id FROM recipes WHERE name=:name")
     result = db.session.execute(sql, {"name": recipe_name})
     recipe_id = result.fetchone()[0]
@@ -190,10 +174,7 @@ def delete_like(recipe_name):
     db.session.commit()
 
 def check_has_user_liked_recipe(recipe_name):
-    username = session["username"]
-    sql = text("SELECT id FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user_id = result.fetchone()[0]
+    user_id=session["id"]
     sql = text("SELECT id FROM recipes WHERE name=:name")
     result = db.session.execute(sql, {"name": recipe_name})
     recipe_id = result.fetchone()[0]
