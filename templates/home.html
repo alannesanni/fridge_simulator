@@ -24,6 +24,7 @@ You have these products in your pantry:
 <hr>
 {% endblock %}
 {% block content2 %}
+{% if recipes %}
 You can make these recipes with your ingredients:
 <ul>
 
@@ -31,7 +32,9 @@ You can make these recipes with your ingredients:
     <li><a href="/recipe/{{i}}">{{i}}</a></li>
     {% endfor %}
     </ul>
-
+{% else %}
+<p>Unfortunately, we do not have any recipes with the ingredients you have selected.</p> 
+{% endif %}
 <hr>
 {% endblock %}
 

@@ -85,7 +85,7 @@ def home():
     recipes = db_methods.check_which_recipes_can_be_made()
     if recipes:
         return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=recipes)
-    return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=["No recipes"])
+    return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=None)
 
 @app.route("/update", methods=["GET", "POST"])
 def update():
