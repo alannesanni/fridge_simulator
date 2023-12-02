@@ -13,22 +13,28 @@ def register(username, password):
 def validate(username, password):
     if not username or not password:
         raise Exception("Username and password are required")
-    if not re.match("^[a-z]+$", username):
-        raise Exception("Username can only contain letters a-z")
-
     sql = text("SELECT id FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     length = len(result.fetchall())
-    if length != 0:
-        raise Exception(f"User with username {username} already exists")
+    if not re.match("^[a-z]+$", username) or length != 0 or len(username) < 3 or len(password) < 5:
+        errors=[]
+        if not re.match("^[a-z]+$", username):
+            errors.append("Username can only contain letters a-z")
 
-    if len(username) < 3:
-        raise Exception("Username too short")
-    if len(password) < 5:
-        raise Exception("Password too short")
+        if length != 0:
+            errors.append(f"User with username {username} already exists")
 
-    if re.match("^[a-z]+$", password):
-        raise Exception("Password can't only contain letters")
+        if len(username) < 3:
+            errors.append("Username too short")
+        if len(password) < 5:
+            errors.append("Password too short")
+
+        if re.match("^[a-z]+$", password):
+            errors.append("Password can't only contain letters")
+        errors_str=", ".join(errors)
+        raise Exception(errors_str)
+    
+        
 
 def add_user_to_db(username, password, role):
     hash_password = generate_password_hash(password)
