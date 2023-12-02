@@ -42,11 +42,12 @@ def register():
         password = request.form["password"]
         try:
             user_methods.register(username, password)
+            user_methods.login(username, password)
             try:
                 del session["register_data"]
             except:
                 pass
-            return redirect("/")
+            return redirect("/home")
 
         except Exception as error:
             session["register_data"] = {"username": username, "password": password}
