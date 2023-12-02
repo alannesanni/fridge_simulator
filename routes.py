@@ -110,16 +110,19 @@ def home():
 
 @app.route("/recipe/<recipe_name>")
 def recipe(recipe_name):
-    is_liked = False
+    username = session["username"]
+    is_liked = db_methods.check_has_user_liked_recipe(username, recipe_name)
     recipe=db_methods.get_recipe(recipe_name)
     length_ing=len(recipe[1])
     return render_template("recipe.html", recipe_name=recipe[0], recipe_ingredients=recipe[1], recipe_instructions=recipe[2], length_ing=length_ing, is_liked=is_liked)
 
 @app.route('/like_recipe', methods=['POST'])
 def like_recipe():
+    username = session["username"]
     is_liked = 'heart' in request.form and request.form['heart'] == 'true'
+    recipe_name = request.form.get('recipe_name', '')
     if is_liked:
-        True
+        db_methods.add_like(username, recipe_name)
     else:
-        False
+        db_methods.delete_like(username, recipe_name)
     return ""

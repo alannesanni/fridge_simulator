@@ -209,5 +209,44 @@ class DatabaseMethods:
         return user_role
 
 
+    def add_like(self, username, recipe_name):
+        sql = text("SELECT id FROM users WHERE username=:username")
+        result = db.session.execute(sql, {"username": username})
+        user_id = result.fetchone()[0]
+        sql = text("SELECT id FROM recipes WHERE name=:name")
+        result = db.session.execute(sql, {"name": recipe_name})
+        recipe_id = result.fetchone()[0]
+        sql = text(
+            "INSERT INTO liked_recipes (user_id, recipe_id) VALUES (:user_id, :recipe_id)")
+        db.session.execute(
+            sql, {"user_id": user_id, "recipe_id": recipe_id})
+        db.session.commit()
 
+    def delete_like(self, username, recipe_name):
+        sql = text("SELECT id FROM users WHERE username=:username")
+        result = db.session.execute(sql, {"username": username})
+        user_id = result.fetchone()[0]
+        sql = text("SELECT id FROM recipes WHERE name=:name")
+        result = db.session.execute(sql, {"name": recipe_name})
+        recipe_id = result.fetchone()[0]
+        sql = text(
+            "DELETE FROM liked_recipes WHERE user_id=:user_id AND recipe_id=:recipe_id")
+        db.session.execute(
+            sql, {"user_id": user_id, "recipe_id": recipe_id})
+        db.session.commit()
+
+    def check_has_user_liked_recipe(self, username, recipe_name):
+        sql = text("SELECT id FROM users WHERE username=:username")
+        result = db.session.execute(sql, {"username": username})
+        user_id = result.fetchone()[0]
+        sql = text("SELECT id FROM recipes WHERE name=:name")
+        result = db.session.execute(sql, {"name": recipe_name})
+        recipe_id = result.fetchone()[0]
+        sql = text("SELECT id FROM liked_recipes WHERE user_id=:user_id AND recipe_id=:recipe_id")
+        result = db.session.execute(sql, {"user_id": user_id, "recipe_id": recipe_id})
+        res = result.fetchone()
+        if res:
+            return True
+        else:
+            return False
 

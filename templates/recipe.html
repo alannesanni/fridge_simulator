@@ -6,6 +6,7 @@
                 {% endblock %}
                 
 {% block content1 %}
+<h2 id="recipeName">{{ recipe_name }}</h2>
 <form action="/like_recipe" method="post" id="heartForm"></form>
 <div class="heart-checkbox">
     <input type="checkbox" id="heart" class="hidden-checkbox" {% if is_liked %}checked{% endif %}>
@@ -18,15 +19,17 @@ const heartCheckbox = document.getElementById("heart");
 
 heartCheckbox.addEventListener('change', function() {
   const heartValue = heartCheckbox.checked;
+  const recipeName = document.querySelector('#recipeName').innerText;
   fetch("/like_recipe", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: "heart=" + heartValue,
+    body: "heart=" + heartValue + "&recipe_name=" + encodeURIComponent(recipeName)
   });
 });
   </script>
+
 <h4> Ingredients:</h4>
     <ul>
     {%for i in range(0, length_ing)%} 
