@@ -1,21 +1,21 @@
-from sqlalchemy.sql import text
-import re
-from werkzeug.security import check_password_hash, generate_password_hash
 import ast
 import json
+from sqlalchemy.sql import text
+from flask import session
 from db import db
 import user_methods
-from flask import session
+
 
 def initialize_db():
     if is_users_empty():
         user_methods.add_user_to_db("admin", "admin123", "admin")
-        
+
     if is_ingredients_empty():
         add_ingredients_to_db()
 
     if is_recipes_empty():
         add_recipes_to_db()
+
 
 def is_ingredients_empty():
     sql = text("SELECT name FROM ingredients")
@@ -25,6 +25,7 @@ def is_ingredients_empty():
         return False
     return True
 
+
 def is_recipes_empty():
     sql = text("SELECT name FROM recipes")
     result = db.session.execute(sql)
@@ -33,6 +34,7 @@ def is_recipes_empty():
         return False
     return True
 
+
 def is_users_empty():
     sql = text("SELECT username FROM users")
     result = db.session.execute(sql)
@@ -40,6 +42,7 @@ def is_users_empty():
     if all:
         return False
     return True
+
 
 def add_ingredients_to_db():
     with open("ingredients.json") as file:
@@ -51,38 +54,42 @@ def add_ingredients_to_db():
         db.session.execute(sql, {"name": i["name"], "place": i["place"]})
         db.session.commit()
 
+
 def add_recipes_to_db():
     with open("recipes.json") as file:
         data = json.load(file)
     data = data["recipes"]
     for i in data:
         try:
-            ingredient_ids = []
+            ing_ids = []
             for j in i["ingredients"]:
                 sql = text("SELECT id FROM ingredients WHERE name=:name")
                 result = db.session.execute(sql, {"name": j})
                 ing_id = result.fetchone()[0]
-                ingredient_ids.append(ing_id)
-            sql = text(
-                "INSERT INTO recipes (name, ingredient_ids, instructions) VALUES (:name, :ingredient_ids, :instructions)")
-            db.session.execute(sql, {
-                                "name": i["name"], "ingredient_ids": ingredient_ids, "instructions": i["instructions"]})
+                ing_ids.append(ing_id)
+            sql = text("""INSERT INTO recipes (name, ingredient_ids, instructions)
+                VALUES (:name, :ing_ids, :inst)""")
+            db.session.execute(
+                sql, {"name": i["name"], "ing_ids": ing_ids, "inst": i["instructions"]})
             db.session.commit()
         except:
             continue
 
-def add_ingredient(name:str, place:str):
-    sql = text(
-            "INSERT INTO ingredients (name, place) VALUES (:name, :place)")
+
+def add_ingredient(name: str, place: str):
+    sql = text("INSERT INTO ingredients (name, place) VALUES (:name, :place)")
     db.session.execute(sql, {"name": name, "place": place})
     db.session.commit()
 
-def add_recipe(name:str, ingredients:list, instructions:str):
+
+def add_recipe(name: str, ingredients: list, instructions: str):
     sql = text(
-        "INSERT INTO recipes (name, ingredient_ids, instructions) VALUES (:name, :ingredient_ids, :instructions)")
+        """INSERT INTO recipes (name, ingredient_ids, instructions)
+        VALUES (:name, :ingredient_ids, :instructions)""")
     db.session.execute(sql, {
-                        "name": name, "ingredient_ids": ingredients, "instructions": instructions})
+        "name": name, "ingredient_ids": ingredients, "instructions": instructions})
     db.session.commit()
+
 
 def get_ingredient_options():
     sql = text("SELECT name, place FROM ingredients")
@@ -93,8 +100,9 @@ def get_ingredient_options():
         options.append(i[0])
     return options
 
+
 def check_which_recipes_can_be_made():
-    user_id=session["id"]
+    user_id = session["id"]
     sql = text(
         "SELECT selected FROM selected_ingredients WHERE id=:user_id")
     result = db.session.execute(sql, {"user_id": user_id})
@@ -110,15 +118,17 @@ def check_which_recipes_can_be_made():
             recipes_that_can_be_made.append(i[0])
     return recipes_that_can_be_made
 
+
 def update_selected_ingredients(selected):
-    user_id=session["id"]
+    user_id = session["id"]
     sql = text(
         "UPDATE selected_ingredients SET selected =:selected WHERE id=:user_id")
     db.session.execute(sql, {"selected": selected, "user_id": user_id})
     db.session.commit()
 
+
 def get_selected_ingredients(form):
-    user_id=session["id"]
+    user_id = session["id"]
     sql = text("SELECT selected FROM selected_ingredients WHERE id=:user_id")
     result = db.session.execute(sql, {"user_id": user_id})
     selected_str = result.fetchone()[0]
@@ -137,13 +147,15 @@ def get_selected_ingredients(form):
             ing_names_pantry.append(ing[0])
     return (ing_names_fridge, ing_names_pantry)
 
+
 def get_recipe(recipe_name):
-    sql = text("SELECT name, ingredient_ids, instructions FROM recipes WHERE name =:recipe_name")
+    sql = text(
+        "SELECT name, ingredient_ids, instructions FROM recipes WHERE name =:recipe_name")
     result = db.session.execute(sql, {"recipe_name": recipe_name})
     recipe = result.fetchone()
     ingredients_id = list(ast.literal_eval(recipe[1]))
-    ing_names=[]
-    for i in  ingredients_id:
+    ing_names = []
+    for i in ingredients_id:
         sql = text("SELECT name FROM ingredients WHERE id=:ing_id")
         result = db.session.execute(sql, {"ing_id": i})
         ing = result.fetchone()[0]
@@ -152,7 +164,7 @@ def get_recipe(recipe_name):
 
 
 def add_like(recipe_name):
-    user_id=session["id"]
+    user_id = session["id"]
     sql = text("SELECT id FROM recipes WHERE name=:name")
     result = db.session.execute(sql, {"name": recipe_name})
     recipe_id = result.fetchone()[0]
@@ -162,8 +174,9 @@ def add_like(recipe_name):
         sql, {"user_id": user_id, "recipe_id": recipe_id})
     db.session.commit()
 
+
 def delete_like(recipe_name):
-    user_id=session["id"]
+    user_id = session["id"]
     sql = text("SELECT id FROM recipes WHERE name=:name")
     result = db.session.execute(sql, {"name": recipe_name})
     recipe_id = result.fetchone()[0]
@@ -173,16 +186,17 @@ def delete_like(recipe_name):
         sql, {"user_id": user_id, "recipe_id": recipe_id})
     db.session.commit()
 
+
 def check_has_user_liked_recipe(recipe_name):
-    user_id=session["id"]
+    user_id = session["id"]
     sql = text("SELECT id FROM recipes WHERE name=:name")
     result = db.session.execute(sql, {"name": recipe_name})
     recipe_id = result.fetchone()[0]
-    sql = text("SELECT id FROM liked_recipes WHERE user_id=:user_id AND recipe_id=:recipe_id")
-    result = db.session.execute(sql, {"user_id": user_id, "recipe_id": recipe_id})
+    sql = text(
+        "SELECT id FROM liked_recipes WHERE user_id=:user_id AND recipe_id=:recipe_id")
+    result = db.session.execute(
+        sql, {"user_id": user_id, "recipe_id": recipe_id})
     res = result.fetchone()
     if res:
         return True
-    else:
-        return False
-
+    return False

@@ -3,11 +3,13 @@ from app import app
 import db_methods
 import user_methods
 
+
 @app.route("/")
 def index():
     db_methods.initialize_db()
     session["role"] = "user"
     return render_template("index.html")
+
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -19,19 +21,21 @@ def login():
             del session["login_data"]
         except:
             pass
-        if session["role"]=="admin":
+        if session["role"] == "admin":
             return redirect("/admin")
         return redirect("/home")
-    except Exception as error:
+    except ValueError as error:
         flash(str(error))
         session["login_data"] = {"username": username, "password": password}
         return redirect("/")
 
+
 @app.route("/logout")
 def logout():
     del session["id"]
-    session["role"]="user"
+    session["role"] = "user"
     return redirect("/")
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -49,18 +53,21 @@ def register():
                 pass
             return redirect("/home")
 
-        except Exception as error:
-            session["register_data"] = {"username": username, "password": password}
+        except ValueError as error:
+            session["register_data"] = {
+                "username": username, "password": password}
             flash(str(error))
             return redirect("/register")
-    
+
+
 @app.route("/admin")
 def admin():
-    if session["role"]=="admin":
-            options = db_methods.get_ingredient_options()
-            length = len(options)
-            return render_template("admin.html", options=options, length=length)
+    if session["role"] == "admin":
+        options = db_methods.get_ingredient_options()
+        length = len(options)
+        return render_template("admin.html", options=options, length=length)
     return redirect("/")
+
 
 @app.route("/add_ingredient", methods=["POST"])
 def add_ingredient():
@@ -69,6 +76,7 @@ def add_ingredient():
     db_methods.add_ingredient(name, place)
     return redirect("/admin")
 
+
 @app.route("/add_recipe", methods=["POST"])
 def add_recipe():
     name = request.form["name"]
@@ -76,6 +84,7 @@ def add_recipe():
     instructions = request.form["instructions"]
     db_methods.add_recipe(name, ingredients, instructions)
     return redirect("/admin")
+
 
 @app.route("/home")
 def home():
@@ -86,6 +95,7 @@ def home():
     if recipes:
         return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=recipes)
     return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=None)
+
 
 @app.route("/update", methods=["GET", "POST"])
 def update():
@@ -99,12 +109,15 @@ def update():
         db_methods.update_selected_ingredients(selected)
         return redirect("/home")
 
+
 @app.route("/recipe/<recipe_name>")
 def recipe(recipe_name):
     is_liked = db_methods.check_has_user_liked_recipe(recipe_name)
-    recipe=db_methods.get_recipe(recipe_name)
-    length_ing=len(recipe[1])
-    return render_template("recipe.html", recipe_name=recipe[0], recipe_ingredients=recipe[1], recipe_instructions=recipe[2], length_ing=length_ing, is_liked=is_liked)
+    recipe_tuple = db_methods.get_recipe(recipe_name)
+    length_ing = len(recipe_tuple[1])
+    return render_template("recipe.html", recipe_name=recipe_tuple[0],
+                           recipe_ingredients=recipe_tuple[1], recipe_instructions=recipe_tuple[2], length_ing=length_ing, is_liked=is_liked)
+
 
 @app.route('/like_recipe', methods=['POST'])
 def like_recipe():
