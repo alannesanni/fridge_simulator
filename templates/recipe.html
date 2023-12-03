@@ -11,7 +11,6 @@
 <div class="heart-checkbox">
     <input type="checkbox" id="heart" class="hidden-checkbox" {% if is_liked %}checked{% endif %}>
     <label for="heart" class="heart-label"></label>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </div>
 </form>
 
@@ -21,12 +20,13 @@ const heartCheckbox = document.getElementById("heart");
 heartCheckbox.addEventListener('change', function() {
   const heartValue = heartCheckbox.checked;
   const recipeName = document.querySelector('#recipeName').innerText;
+  const csrfToken = "{{ session.csrf_token }}";
   fetch("/like_recipe", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: "heart=" + heartValue + "&recipe_name=" + encodeURIComponent(recipeName)
+    body: "heart=" + heartValue + "&recipe_name=" + encodeURIComponent(recipeName) + "&csrf_token=" + encodeURIComponent(csrfToken)
   });
 });
   </script>
