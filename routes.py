@@ -17,10 +17,8 @@ def login():
     password = request.form["password"]
     try:
         user_methods.login(username, password)
-        try:
+        if "login_data" in session:
             del session["login_data"]
-        except:
-            pass
         if session["role"] == "admin":
             return redirect("/admin")
         return redirect("/home")
@@ -33,6 +31,10 @@ def login():
 @app.route("/logout")
 def logout():
     del session["id"]
+    if "login_data" in session:
+        del session["login_data"]
+    if "register_data" in session:
+        del session["register_data"]
     session["role"] = "user"
     return redirect("/")
 
@@ -47,10 +49,8 @@ def register():
         try:
             user_methods.register(username, password)
             user_methods.login(username, password)
-            try:
+            if "register_data" in session:
                 del session["register_data"]
-            except:
-                pass
             return redirect("/home")
 
         except ValueError as error:
