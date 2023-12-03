@@ -202,3 +202,15 @@ def check_has_user_liked_recipe(recipe_name):
     if res:
         return True
     return False
+
+def get_liked_recipes():
+    user_id = session["id"]
+    sql = text("SELECT name FROM recipes WHERE id IN (SELECT recipe_id FROM liked_recipes WHERE user_id=:user_id)")
+    result = db.session.execute(sql, {"user_id": user_id})
+    recipe_tuples = result.fetchall()
+    if not recipe_tuples:
+        return None
+    recipe_names=[]
+    for i in recipe_tuples:
+        recipe_names.append(i[0])
+    return recipe_names

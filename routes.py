@@ -99,9 +99,10 @@ def home():
     ing_names_fridge = selected_ing[0]
     ing_names_pantry = selected_ing[1]
     recipes = db_methods.check_which_recipes_can_be_made()
+    liked_rec=db_methods.get_liked_recipes()
     if recipes:
-        return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=recipes)
-    return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=None)
+        return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=recipes, liked_rec=liked_rec)
+    return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=None, liked_rec=liked_rec)
 
 
 @app.route("/update", methods=["GET", "POST"])

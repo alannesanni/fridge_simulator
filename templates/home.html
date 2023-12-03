@@ -36,5 +36,16 @@ You can make these recipes with your ingredients:
 <p>Unfortunately, we do not have any recipes with the ingredients you have selected.</p> 
 {% endif %}
 <hr>
+{% if liked_rec %}
+You have liked these recipes:
+<ul>
+    {% for i in liked_rec %}
+    <li><a href="/recipe/{{i}}">{{i}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+<p>You haven't liked any recipes.</p> 
+{% endif %}
+<hr>
 {% endblock %}
 
