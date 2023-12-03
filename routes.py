@@ -66,7 +66,8 @@ def admin():
         options = db_methods.get_ingredient_options()
         length = len(options)
         return render_template("admin.html", options=options, length=length)
-    return redirect("/")
+    return render_template("error.html", error_message="You don't have access to this page.")
+
 
 
 @app.route("/add_ingredient", methods=["POST"])
@@ -92,6 +93,8 @@ def add_recipe():
 
 @app.route("/home")
 def home():
+    if "id" not in session:
+        return render_template("error.html", error_message="You need to be logged in to access this page.")
     selected_ing = db_methods.get_selected_ingredients("name")
     ing_names_fridge = selected_ing[0]
     ing_names_pantry = selected_ing[1]
@@ -104,6 +107,8 @@ def home():
 @app.route("/update", methods=["GET", "POST"])
 def update():
     if request.method == "GET":
+        if "id" not in session:
+            return render_template("error.html", error_message="You need to be logged in to access this page.")
         options = db_methods.get_ingredient_options()
         length = len(options)
         selected = db_methods.get_selected_ingredients("id")
@@ -118,8 +123,12 @@ def update():
 
 @app.route("/recipe/<recipe_name>")
 def recipe(recipe_name):
-    is_liked = db_methods.check_has_user_liked_recipe(recipe_name)
+    if "id" not in session:
+        return render_template("error.html", error_message="You need to be logged in to access this page.")
     recipe_tuple = db_methods.get_recipe(recipe_name)
+    if not recipe_tuple: 
+        return render_template("error.html", error_message="We don't have this recipe.")
+    is_liked = db_methods.check_has_user_liked_recipe(recipe_name)
     length_ing = len(recipe_tuple[1])
     return render_template("recipe.html", recipe_name=recipe_tuple[0],
                            recipe_ingredients=recipe_tuple[1], recipe_instructions=recipe_tuple[2], length_ing=length_ing, is_liked=is_liked)

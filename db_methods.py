@@ -153,6 +153,8 @@ def get_recipe(recipe_name):
         "SELECT name, ingredient_ids, instructions FROM recipes WHERE name =:recipe_name")
     result = db.session.execute(sql, {"recipe_name": recipe_name})
     recipe = result.fetchone()
+    if not recipe:
+        return None
     ingredients_id = list(ast.literal_eval(recipe[1]))
     ing_names = []
     for i in ingredients_id:
