@@ -16,6 +16,7 @@ Ingredient storage place:
 <br>
 <input type="radio" name="place" id="fridge" value="fridge"> Fridge </input><br>
 <input type="radio" name="place" id="pantry" value="pantry"> Pantry </input><br>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 <br>
 <input type="submit" value="Send">
 </form>
@@ -33,6 +34,7 @@ Ingredients:
 {%for i in range(1, length)%} 
   <input type="checkbox" name="cb" value={{ i }} id="ingredient-{{i}}">
   <label for="ingredient-{{loop.index}}">{{options[i]}}</label>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   <br>
   {%endfor%}
   <br>

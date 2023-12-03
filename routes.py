@@ -71,6 +71,8 @@ def admin():
 
 @app.route("/add_ingredient", methods=["POST"])
 def add_ingredient():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return render_template("error.html")
     name = request.form["name"]
     place = request.form["place"]
     db_methods.add_ingredient(name, place)
@@ -79,6 +81,8 @@ def add_ingredient():
 
 @app.route("/add_recipe", methods=["POST"])
 def add_recipe():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return render_template("error.html")
     name = request.form["name"]
     ingredients = request.form.getlist('cb')
     instructions = request.form["instructions"]
@@ -105,6 +109,8 @@ def update():
         selected = db_methods.get_selected_ingredients("id")
         return render_template("update.html", options=options, length=length, selected=selected)
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            return render_template("error.html")
         selected = request.form.getlist('cb')
         db_methods.update_selected_ingredients(selected)
         return redirect("/home")
@@ -119,10 +125,12 @@ def recipe(recipe_name):
                            recipe_ingredients=recipe_tuple[1], recipe_instructions=recipe_tuple[2], length_ing=length_ing, is_liked=is_liked)
 
 
-@app.route('/like_recipe', methods=['POST'])
+@app.route("/like_recipe", methods=["POST"])
 def like_recipe():
-    is_liked = 'heart' in request.form and request.form['heart'] == 'true'
-    recipe_name = request.form.get('recipe_name', '')
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return render_template("error.html")
+    is_liked = "heart" in request.form and request.form["heart"] == "true"
+    recipe_name = request.form.get("recipe_name", "")
     if is_liked:
         db_methods.add_like(recipe_name)
     else:

@@ -1,6 +1,7 @@
 import re
 from sqlalchemy.sql import text
 from werkzeug.security import check_password_hash, generate_password_hash
+import secrets
 from flask import session
 from db import db
 
@@ -71,6 +72,7 @@ def login(username, password):
     session["id"] = user_id
     role = get_role()
     session["role"] = role
+    session["csrf_token"] = secrets.token_hex(16)
 
 
 def get_role():

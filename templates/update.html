@@ -11,6 +11,7 @@ Choose what ingredients you have:
 <form action="/update" method="POST">
 {%for i in range(1, length)%} 
   <input type="checkbox" name="cb" value={{ i }} id="ingredient-{{i}}" {% if i in selected %}checked{% endif %}>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   <label for="ingredient-{{loop.index}}">{{options[i]}}</label>
   <br>
   {%endfor%}
