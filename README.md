@@ -1,7 +1,7 @@
 # Fridge simulator
 Sovelluksessa voi listata, mitä kaikkia aineksia kotoa löytyy ja sovellus ehdottaa käyttäjälle reseptejä, joihin käyttäjällä on ainekset. Jokainen käyttäjä on peruskäyttäjä tai ylläpitäjä.
 
-**Sovelluksen ominaisuuksia**
+**Sovelluksen ominaisudet**
 * Käyttäjä voi rekisteröityä sekä kirjautua sisään ja ulos.
 * Käyttäjä voi valita listasta mitä kaikkia aineksia häneltä löytyy.
 * Käyttäjä voi poistaa omalta listaltaan aineksia, mitä häneltä ei enää löydy.
@@ -10,13 +10,21 @@ Sovelluksessa voi listata, mitä kaikkia aineksia kotoa löytyy ja sovellus ehdo
 * Käyttäjä voi poistaa reseptiltä tykkäyksen.
 * Ylläpitäjä voi lisätä sovellukseen puuttuvia valittavia aineksia ja uusia reseptejä.
   
+**Testausta helpottamaan** 
 
-**Tällä hetkellä sovelluksesta löytyy seuraavat ominaisuudet:**
-* Käyttäjä voi rekisteröityä sekä kirjautua sisään ja ulos.
-* Käyttäjä voi päivittää häneltä löytyvät ainekset, mutta päivityksen yhteydessä aikaisemmin valitut ainekset nollautuva. Kaikki haluttavat ainekset pitää siis valita kerrallaan listasta.
-* Sovellus ehdottaa käyttäjälle reseptejä mihin käyttäjältä löytyy ainekset, resepteistä ei näy käyttäjälle vielä muuta kun reseptin nimi.
+Reseptejä löytyy valitsemalla esimerkiksi seuraavat ainesosat: 
 
-Testausta helpottamaan: Reseptejä löytyy valitsemalla esimerkiksi seuraavat ainesosat: *Chicken Breast, Rice*, *Olive Oil tai Broccoli, Cheese, Pasta*
+*Chicken Breast, Rice, Olive Oil* 
+
+*Broccoli, Cheese, Pasta*
+
+Sovellus luo automaattisesti ylläpitäjän:
+
+käyttäjänimi: *admin*
+
+salasana: *admin123*
+
+
 
 **Käynnistysohjeet**
 
