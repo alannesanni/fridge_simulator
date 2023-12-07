@@ -48,10 +48,10 @@ def add_ingredients_to_db():
     with open("ingredients.json") as file:
         data = json.load(file)
     data = data["ingredients"]
-    for i in data:
+    for ing in data:
         sql = text(
             "INSERT INTO ingredients (name, place) VALUES (:name, :place)")
-        db.session.execute(sql, {"name": i["name"], "place": i["place"]})
+        db.session.execute(sql, {"name": ing["name"], "place": ing["place"]})
         db.session.commit()
 
 
@@ -59,18 +59,18 @@ def add_recipes_to_db():
     with open("recipes.json") as file:
         data = json.load(file)
     data = data["recipes"]
-    for i in data:
+    for recipe in data:
         try:
             ing_ids = []
-            for j in i["ingredients"]:
+            for ing in recipe["ingredients"]:
                 sql = text("SELECT id FROM ingredients WHERE name=:name")
-                result = db.session.execute(sql, {"name": j})
+                result = db.session.execute(sql, {"name": ing})
                 ing_id = result.fetchone()[0]
                 ing_ids.append(ing_id)
             sql = text("""INSERT INTO recipes (name, ingredient_ids, instructions)
                 VALUES (:name, :ing_ids, :inst)""")
             db.session.execute(
-                sql, {"name": i["name"], "ing_ids": ing_ids, "inst": i["instructions"]})
+                sql, {"name": recipe["name"], "ing_ids": ing_ids, "inst": recipe["instructions"]})
             db.session.commit()
         except:
             continue
@@ -96,8 +96,8 @@ def get_ingredient_options():
     result = db.session.execute(sql)
     all = result.fetchall()
     options = ["x"]
-    for i in all:
-        options.append(i[0])
+    for ing in all:
+        options.append(ing[0])
     return options
 
 
@@ -112,8 +112,8 @@ def check_which_recipes_can_be_made():
     result = db.session.execute(sql)
     recipes = result.fetchall()
     recipes_that_can_be_made = []
-    for i in recipes:
-        recipe_ing_ids = list(ast.literal_eval(i[1]))
+    for recipe in recipes:
+        recipe_ing_ids = list(ast.literal_eval(recipe[1]))
         if all(ing_id in users_ing_ids for ing_id in recipe_ing_ids):
             recipes_that_can_be_made.append(i[0])
     return recipes_that_can_be_made
@@ -137,9 +137,9 @@ def get_selected_ingredients(form):
         return selected
     ing_names_fridge = []
     ing_names_pantry = []
-    for i in selected:
+    for ing_id in selected:
         sql = text("SELECT name, place FROM ingredients WHERE id=:id_ing")
-        result = db.session.execute(sql, {"id_ing": i})
+        result = db.session.execute(sql, {"id_ing": ing_id})
         ing = result.fetchone()
         if ing[1] == "fridge":
             ing_names_fridge.append(ing[0])
@@ -157,9 +157,9 @@ def get_recipe(recipe_name):
         return None
     ingredients_id = list(ast.literal_eval(recipe[1]))
     ing_names = []
-    for i in ingredients_id:
+    for ing_id in ingredients_id:
         sql = text("SELECT name FROM ingredients WHERE id=:ing_id")
-        result = db.session.execute(sql, {"ing_id": i})
+        result = db.session.execute(sql, {"ing_id": ing_id})
         ing = result.fetchone()[0]
         ing_names.append(ing)
     return (recipe[0], ing_names, recipe[2])
@@ -211,6 +211,6 @@ def get_liked_recipes():
     if not recipe_tuples:
         return None
     recipe_names=[]
-    for i in recipe_tuples:
-        recipe_names.append(i[0])
+    for recipe in recipe_tuples:
+        recipe_names.append(recipe[0])
     return recipe_names
