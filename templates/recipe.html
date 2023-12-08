@@ -7,6 +7,14 @@
                 
 {% block content1 %}
 <h2 id="recipeName">{{ recipe_name }}</h2>
+{% if likes == 1 %}
+This recipe has {{likes}} like!
+{% else %}
+This recipe has {{likes}} likes!
+{% endif %}
+
+<br>
+<br>
 <form action="/like_recipe" method="post" id="heartForm"></form>
 <div class="heart-checkbox">
     <input type="checkbox" id="heart" class="hidden-checkbox" {% if is_liked %}checked{% endif %}>

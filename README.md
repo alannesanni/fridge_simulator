@@ -62,6 +62,10 @@ Nyt sovelluksen voi käynnistää komennolla:
 flask run
 ```
 
+**Parannusehdotukset**
+
+Reseptin tykkäysten määrä ei päivity automaattisesti kun käyttäjä tykkää/poistaa tykkäyksen reseptistä. Päivittyy kyllä kun sivu ladataan uudestaan.
+
 
 **Laajojen kielimallien käyttö**
 

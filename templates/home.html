@@ -37,7 +37,7 @@ You can make these recipes with your ingredients:
 {% endif %}
 <hr>
 {% if liked_rec %}
-You have liked these recipes:
+You have liked {{liked_count}} recipes:
 <ul>
     {% for i in liked_rec %}
     <li><a href="/recipe/{{i}}">{{i}}</a></li>

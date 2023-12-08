@@ -12,10 +12,11 @@ def home():
     ing_names_fridge = selected_ing[0]
     ing_names_pantry = selected_ing[1]
     recipes = recipe_methods.check_which_recipes_can_be_made()
-    liked_rec=like_methods.get_liked_recipes()
+    liked_rec = like_methods.get_liked_recipes()
+    liked_count = like_methods.user_liked_recipes_count()
     if recipes:
-        return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=recipes, liked_rec=liked_rec)
-    return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=None, liked_rec=liked_rec)
+        return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=recipes, liked_rec=liked_rec, liked_count=liked_count)
+    return render_template("home.html", ing_names_fridge=ing_names_fridge, ing_names_pantry=ing_names_pantry, recipes=None, liked_rec=liked_rec, liked_count=liked_count)
 
 
 @app.route("/update", methods=["GET", "POST"])
@@ -44,8 +45,9 @@ def recipe(recipe_name):
         return render_template("error.html", error_message="We don't have this recipe.")
     is_liked = like_methods.check_has_user_liked_recipe(recipe_name)
     length_ing = len(recipe_tuple[1])
+    likes = like_methods.recipe_likes(recipe_name)
     return render_template("recipe.html", recipe_name=recipe_tuple[0],
-                           recipe_ingredients=recipe_tuple[1], recipe_instructions=recipe_tuple[2], length_ing=length_ing, is_liked=is_liked)
+                           recipe_ingredients=recipe_tuple[1], recipe_instructions=recipe_tuple[2], length_ing=length_ing, is_liked=is_liked, likes=likes)
 
 
 @app.route("/like_recipe", methods=["POST"])
