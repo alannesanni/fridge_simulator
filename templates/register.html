@@ -5,19 +5,24 @@
 <hr4>Register:</hr4>
 <br>
 <form action="/register" method="POST">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-      </ul>
-    {% endif %}
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
   {% endwith %}
-    <p>Username:<br>
-    <input type="text" name="username" pattern="[A-Za-z]{3,}" title="Only letters allowed, minimum length 3 characters" maxlength="20" required value="{{ session.get('register_data', {}).get('username', '') }}"></p>
-    <p>Password:<br>
-    <input type="password" name="password" pattern="(?=.*[A-Za-z])(?=.*\d).{5,}" title="Must contain both letters and numbers, minimum length 5 characters" required value="{{ session.get('register_data', {}).get('password', '') }}"></p>
-    <input type="submit" value="Register">
-    </form>
- {% endblock %}
+  <p>Username:<br>
+    <input type="text" name="username" pattern="[A-Za-z]{3,}" title="Only letters allowed, minimum length 3 characters"
+      maxlength="20" required value="{{ session.get('register_data', {}).get('username', '') }}">
+  </p>
+  <p>Password:<br>
+    <input type="password" name="password" pattern="(?=.*[A-Za-z])(?=.*\d).{5,}"
+      title="Must contain both letters and numbers, minimum length 5 characters" required
+      value="{{ session.get('register_data', {}).get('password', '') }}">
+  </p>
+  <input type="submit" value="Register">
+</form>
+{% endblock %}

@@ -1,25 +1,25 @@
 {% extends "layout.html" %}
 {% block navbar %}
-                <li><a href="/home">Home</a></li>
-                <li><a href="/update">Update ingredients</a></li>
-                <li><a href="/logout">Logout</a></li>
-                {% endblock %}
+<li><a href="/home">Home</a></li>
+<li><a href="/update">Update ingredients</a></li>
+<li><a href="/logout">Logout</a></li>
+{% endblock %}
 
 {% block content1 %}
 You have these products in your fridge:
 <ul>
 
-{% for i in ing_names_fridge %}
-<li> {{ i }}
-{% endfor %}
+    {% for i in ing_names_fridge %}
+    <li> {{ i }}
+        {% endfor %}
 </ul>
 
 You have these products in your pantry:
 <ul>
 
-{% for i in ing_names_pantry %}
-<li> {{ i }}
-{% endfor %}
+    {% for i in ing_names_pantry %}
+    <li> {{ i }}
+        {% endfor %}
 </ul>
 <hr>
 {% endblock %}
@@ -31,9 +31,9 @@ You can make these recipes with your ingredients:
     {% for i in recipes %}
     <li><a href="/recipe/{{i}}">{{i}}</a></li>
     {% endfor %}
-    </ul>
+</ul>
 {% else %}
-<p>Unfortunately, we do not have any recipes with the ingredients you have selected.</p> 
+<p>Unfortunately, we do not have any recipes with the ingredients you have selected.</p>
 {% endif %}
 <hr>
 {% if liked_rec %}
@@ -42,10 +42,9 @@ You have liked {{liked_count}} recipes:
     {% for i in liked_rec %}
     <li><a href="/recipe/{{i}}">{{i}}</a></li>
     {% endfor %}
-    </ul>
+</ul>
 {% else %}
-<p>You haven't liked any recipes.</p> 
+<p>You haven't liked any recipes.</p>
 {% endif %}
 <hr>
 {% endblock %}
-

@@ -1,15 +1,15 @@
 {% extends "layout.html" %}
 {% block navbar %}
-                <li><a href="/home">Home</a></li>
-                <li><a href="/update">Update ingredients</a></li>
-                <li><a href="/logout">Logout</a></li>
-                {% endblock %}
+<li><a href="/home">Home</a></li>
+<li><a href="/update">Update ingredients</a></li>
+<li><a href="/logout">Logout</a></li>
+{% endblock %}
 {% block content1 %}
 Choose what ingredients you have:
 <p>
 
 <form action="/update" method="POST">
-{%for i in range(1, length)%} 
+  {%for i in range(1, length)%}
   <input type="checkbox" name="cb" value={{ i }} id="ingredient-{{i}}" {% if i in selected %}checked{% endif %}>
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   <label for="ingredient-{{loop.index}}">{{options[i]}}</label>

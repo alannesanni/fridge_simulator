@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block navbar %}
-                <li><a href="/home">Home</a></li>
-                <li><a href="/update">Update ingredients</a></li>
-                <li><a href="/logout">Logout</a></li>
-                {% endblock %}
-                
+<li><a href="/home">Home</a></li>
+<li><a href="/update">Update ingredients</a></li>
+<li><a href="/logout">Logout</a></li>
+{% endblock %}
+
 {% block content1 %}
 <h2 id="recipeName">{{ recipe_name }}</h2>
 {% if likes == 1 %}
@@ -17,38 +17,38 @@ This recipe has {{likes}} likes!
 <br>
 <form action="/like_recipe" method="post" id="heartForm"></form>
 <div class="heart-checkbox">
-    <input type="checkbox" id="heart" class="hidden-checkbox" {% if is_liked %}checked{% endif %}>
-    <label for="heart" class="heart-label"></label>
+  <input type="checkbox" id="heart" class="hidden-checkbox" {% if is_liked %}checked{% endif %}>
+  <label for="heart" class="heart-label"></label>
 </div>
 </form>
 
 <script>
-const heartCheckbox = document.getElementById("heart");
+  const heartCheckbox = document.getElementById("heart");
 
-heartCheckbox.addEventListener('change', function() {
-  const heartValue = heartCheckbox.checked;
-  const recipeName = document.querySelector('#recipeName').innerText;
-  const csrfToken = "{{ session.csrf_token }}";
-  fetch("/like_recipe", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: "heart=" + heartValue + "&recipe_name=" + encodeURIComponent(recipeName) + "&csrf_token=" + encodeURIComponent(csrfToken)
+  heartCheckbox.addEventListener('change', function () {
+    const heartValue = heartCheckbox.checked;
+    const recipeName = document.querySelector('#recipeName').innerText;
+    const csrfToken = "{{ session.csrf_token }}";
+    fetch("/like_recipe", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "heart=" + heartValue + "&recipe_name=" + encodeURIComponent(recipeName) + "&csrf_token=" + encodeURIComponent(csrfToken)
+    });
   });
-});
-  </script>
+</script>
 
 <h4> Ingredients:</h4>
-    <ul>
-    {%for i in range(0, length_ing)%} 
-    <li> {{recipe_ingredients[i]}}</li>
-    {%endfor%}
+<ul>
+  {%for i in range(0, length_ing)%}
+  <li> {{recipe_ingredients[i]}}</li>
+  {%endfor%}
 </ul>
 
 {% endblock %}
 
 {% block content2 %}
 <h3> Instructions:</h3>
-    {{recipe_instructions}}
+{{recipe_instructions}}
 {% endblock %}

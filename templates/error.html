@@ -2,12 +2,12 @@
 
 {% block navbar %}
 {% if session.id %}
-    <li><a href="/home">Home</a></li>
-    <li><a href="/update">Update ingredients</a></li>
-    <li><a href="/logout">Logout</a></li>
+<li><a href="/home">Home</a></li>
+<li><a href="/update">Update ingredients</a></li>
+<li><a href="/logout">Logout</a></li>
 {% else %}
-    <li><a href="/">Login</a></li>
-    <li><a href="/register">Register</a></li>
+<li><a href="/">Login</a></li>
+<li><a href="/register">Register</a></li>
 {% endif %}
 {% endblock %}
 
