@@ -29,17 +29,14 @@ def check_which_recipes_can_be_made():
     return recipes_that_can_be_made
 
 def get_recipe(recipe_name):
-    sql = text(
-        "SELECT name, ingredient_ids, instructions FROM recipes WHERE name =:recipe_name")
+    sql = text('''SELECT ingredients.name, recipes.instructions 
+              FROM recipes
+              JOIN ingredients ON ingredients.id=ANY((CAST(recipes.ingredient_ids AS INTEGER[])))
+              WHERE recipes.name = :recipe_name''')
     result = db.session.execute(sql, {"recipe_name": recipe_name})
-    recipe = result.fetchone()
+    recipe = result.fetchall()
     if not recipe:
         return None
-    ingredients_id = list(ast.literal_eval(recipe[1]))
-    ing_names = []
-    for ing_id in ingredients_id:
-        sql = text("SELECT name FROM ingredients WHERE id=:ing_id")
-        result = db.session.execute(sql, {"ing_id": ing_id})
-        ing = result.fetchone()[0]
-        ing_names.append(ing)
-    return (recipe[0], ing_names, recipe[2])
+    ing_names = [ing[0] for ing in recipe]
+    instructions = recipe[0][1]
+    return (recipe_name, ing_names, instructions)
