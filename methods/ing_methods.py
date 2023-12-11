@@ -26,20 +26,18 @@ def update_selected_ingredients(selected):
 
 def get_selected_ingredients(form):
     user_id = session["id"]
-    sql = text("SELECT selected FROM selected_ingredients WHERE id=:user_id")
-    result = db.session.execute(sql, {"user_id": user_id})
-    selected_str = result.fetchone()[0]
-    selected = ast.literal_eval(selected_str)
     if form == "id":
+        sql = text("SELECT selected FROM selected_ingredients WHERE id=:user_id")
+        result = db.session.execute(sql, {"user_id": user_id})
+        selected_str = result.fetchone()[0]
+        selected = ast.literal_eval(selected_str)
         return selected
-    ing_names_fridge = []
-    ing_names_pantry = []
-    for ing_id in selected:
-        sql = text("SELECT name, place FROM ingredients WHERE id=:id_ing")
-        result = db.session.execute(sql, {"id_ing": ing_id})
-        ing = result.fetchone()
-        if ing[1] == "fridge":
-            ing_names_fridge.append(ing[0])
-        if ing[1] == "pantry":
-            ing_names_pantry.append(ing[0])
+    sql = text("""SELECT ingredients.name, ingredients.place 
+              FROM selected_ingredients sel
+              JOIN ingredients ON ingredients.id=ANY((CAST(sel.selected AS INTEGER[])))
+              WHERE sel.id = :user_id""")
+    result = db.session.execute(sql, {"user_id": user_id})
+    ing = result.fetchall()
+    ing_names_fridge = [name for name, place in ing if place == "fridge"]
+    ing_names_pantry = [name for name, place in ing if place == "pantry"]
     return (ing_names_fridge, ing_names_pantry)
