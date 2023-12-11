@@ -2,6 +2,8 @@ import json
 from sqlalchemy.sql import text
 from db import db
 import methods.user_methods as user_methods
+import methods.ing_methods as ing_methods 
+import methods.recipe_methods as recipe_methods
 
 def initialize_db():
     if is_users_empty():
@@ -46,10 +48,7 @@ def add_ingredients_to_db():
         data = json.load(file)
     data = data["ingredients"]
     for ing in data:
-        sql = text(
-            "INSERT INTO ingredients (name, place) VALUES (:name, :place)")
-        db.session.execute(sql, {"name": ing["name"], "place": ing["place"]})
-        db.session.commit()
+        ing_methods.add_ingredient(ing["name"], ing["place"])
 
 
 def add_recipes_to_db():
@@ -64,10 +63,6 @@ def add_recipes_to_db():
                 result = db.session.execute(sql, {"name": ing})
                 ing_id = result.fetchone()[0]
                 ing_ids.append(ing_id)
-            sql = text("""INSERT INTO recipes (name, ingredient_ids, instructions)
-                VALUES (:name, :ing_ids, :inst)""")
-            db.session.execute(
-                sql, {"name": recipe["name"], "ing_ids": ing_ids, "inst": recipe["instructions"]})
-            db.session.commit()
+            recipe_methods.add_recipe(recipe["name"], ing_ids, recipe["instructions"])
         except:
             continue
