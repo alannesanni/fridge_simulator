@@ -2,7 +2,7 @@ import json
 from sqlalchemy.sql import text
 from db import db
 import methods.user_methods as user_methods
-import methods.ing_methods as ing_methods 
+import methods.ing_methods as ing_methods
 import methods.recipe_methods as recipe_methods
 
 def initialize_db():

@@ -29,10 +29,10 @@ def check_which_recipes_can_be_made():
     return recipes_that_can_be_made
 
 def get_recipe(recipe_name):
-    sql = text('''SELECT ingredients.name, recipes.instructions 
+    sql = text("""SELECT ingredients.name, recipes.instructions
               FROM recipes
               JOIN ingredients ON ingredients.id=ANY((CAST(recipes.ingredient_ids AS INTEGER[])))
-              WHERE recipes.name = :recipe_name''')
+              WHERE recipes.name = :recipe_name""")
     result = db.session.execute(sql, {"recipe_name": recipe_name})
     recipe = result.fetchall()
     if not recipe:

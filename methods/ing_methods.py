@@ -32,7 +32,7 @@ def get_selected_ingredients(form):
         selected_str = result.fetchone()[0]
         selected = ast.literal_eval(selected_str)
         return selected
-    sql = text("""SELECT ingredients.name, ingredients.place 
+    sql = text("""SELECT ingredients.name, ingredients.place
               FROM selected_ingredients sel
               JOIN ingredients ON ingredients.id=ANY((CAST(sel.selected AS INTEGER[])))
               WHERE sel.id = :user_id""")

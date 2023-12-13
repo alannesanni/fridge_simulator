@@ -3,4 +3,5 @@
 disable=missing-module-docstring,
         missing-function-docstring,
         import-error,
-        cyclic-import
+        cyclic-import,
+        consider-using-from-import

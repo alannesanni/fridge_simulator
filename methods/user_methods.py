@@ -1,7 +1,7 @@
 import re
+import secrets
 from sqlalchemy.sql import text
 from werkzeug.security import check_password_hash, generate_password_hash
-import secrets
 from flask import session
 from db import db
 
