@@ -1,9 +1,6 @@
 {% extends "layout.html" %}
 {% block content1 %}
-<br>
-<br>
-<hr4>Login:</hr4>
-<br>
+<h3>Login:</h3>
 <form action="/login" method="POST">
   {% with messages = get_flashed_messages() %}
   {% if messages %}

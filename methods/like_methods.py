@@ -59,15 +59,11 @@ def user_liked_recipes_count():
                (SELECT recipe_id FROM liked_recipes WHERE user_id=:user_id)""")
     result = db.session.execute(sql, {"user_id": user_id})
     liked_count = result.fetchone()[0]
-    print(liked_count)
     return liked_count
 
 def recipe_likes(recipe_name):
     sql = text("""SELECT COUNT(user_id) FROM liked_recipes WHERE recipe_id IN
-               (SELECT recipe_id FROM recipes WHERE name=:recipe_name)""")
+               (SELECT id FROM recipes WHERE name=:recipe_name)""")
     result = db.session.execute(sql, {"recipe_name": recipe_name})
     recipe_likes_count = result.fetchone()[0]
-    print(recipe_likes_count)
     return recipe_likes_count
-
-

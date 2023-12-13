@@ -1,9 +1,6 @@
 {% extends "layout.html" %}
 {% block content1 %}
-<br>
-<br>
-<hr4>Register:</hr4>
-<br>
+<h3>Register:</h3>
 <form action="/register" method="POST">
   {% with messages = get_flashed_messages() %}
   {% if messages %}
