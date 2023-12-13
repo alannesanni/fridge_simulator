@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, jsonify, request, session
 from app import app
 import methods.like_methods as like_methods
 import methods.ing_methods as ing_methods
@@ -62,4 +62,5 @@ def like_recipe():
         like_methods.add_like(recipe_name)
     else:
         like_methods.delete_like(recipe_name)
-    return ""
+    updated_likes = like_methods.recipe_likes(recipe_name)
+    return jsonify({"likes": updated_likes})

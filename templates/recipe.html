@@ -7,14 +7,11 @@
 
 {% block content1 %}
 <h2 id="recipeName">{{ recipe_name }}</h2>
-{% if likes == 1 %}
-This recipe has {{likes}} like!
-{% else %}
-This recipe has {{likes}} likes!
-{% endif %}
+<p id="likes">
+  This recipe has <span id="likes_count">{{ likes }}</span> 
+  <span id="like_text">{% if likes == 1 %}like{% else %}likes{% endif %}</span>!
+</p>
 
-<br>
-<br>
 <form action="/like_recipe" method="post" id="heartForm"></form>
 <div class="heart-checkbox">
   <input type="checkbox" id="heart" class="hidden-checkbox" {% if is_liked %}checked{% endif %}>
@@ -24,6 +21,8 @@ This recipe has {{likes}} likes!
 
 <script>
   const heartCheckbox = document.getElementById("heart");
+  const likesCount = document.getElementById("likes_count")
+  const likeText = document.getElementById("like_text");
 
   heartCheckbox.addEventListener('change', function () {
     const heartValue = heartCheckbox.checked;
@@ -35,6 +34,11 @@ This recipe has {{likes}} likes!
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: "heart=" + heartValue + "&recipe_name=" + encodeURIComponent(recipeName) + "&csrf_token=" + encodeURIComponent(csrfToken)
+    })
+    .then(response => response.json())
+    .then(data => {
+      likesCount.innerText = data.likes;
+      likeText.innerText = data.likes === 1 ? "like" : "likes";
     });
   });
 </script>
