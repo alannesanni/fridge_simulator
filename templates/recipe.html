@@ -8,7 +8,7 @@
 {% block content1 %}
 <h2 id="recipeName">{{ recipe_name }}</h2>
 <p id="likes">
-  This recipe has <span id="likes_count">{{ likes }}</span> 
+  This recipe has <span id="likes_count">{{ likes }}</span>
   <span id="like_text">{% if likes == 1 %}like{% else %}likes{% endif %}</span>!
 </p>
 
@@ -35,11 +35,11 @@
       },
       body: "heart=" + heartValue + "&recipe_name=" + encodeURIComponent(recipeName) + "&csrf_token=" + encodeURIComponent(csrfToken)
     })
-    .then(response => response.json())
-    .then(data => {
-      likesCount.innerText = data.likes;
-      likeText.innerText = data.likes === 1 ? "like" : "likes";
-    });
+      .then(response => response.json())
+      .then(data => {
+        likesCount.innerText = data.likes;
+        likeText.innerText = data.likes === 1 ? "like" : "likes";
+      });
   });
 </script>
 
