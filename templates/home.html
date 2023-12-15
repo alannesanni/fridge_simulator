@@ -33,11 +33,11 @@ You can make these recipes with your ingredients:
     {% endfor %}
 </ul>
 {% else %}
-<p>Unfortunately, we do not have any recipes with the ingredients you have selected.</p>
+<p>Unfortunately, we don't have any recipes with the ingredients you have selected.</p>
 {% endif %}
 <hr>
 {% if liked_rec %}
-You have liked {{liked_count}} recipes:
+<p>You have liked {{liked_count}} {% if liked_count == 1 %}recipe:{% else %}recipes:{% endif %}</p>
 <ul>
     {% for i in liked_rec %}
     <li><a href="/recipe/{{i}}">{{i}}</a></li>
